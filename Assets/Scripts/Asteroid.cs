@@ -1,15 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Asteroid : MonoBehaviour {
+public class Asteroid : MonoBehaviour, IAsteroid
+{
+	public int score = 5;
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+	public void hit()
+	{
+
 	}
 }
