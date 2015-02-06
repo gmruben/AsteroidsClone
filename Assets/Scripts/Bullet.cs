@@ -35,7 +35,7 @@ public class Bullet : MonoBehaviour
 		if (point.y < 0.0f || point.y > 1.0f) cachedTransform.position = new Vector3(cachedTransform.position.x, -cachedTransform.position.y, cachedTransform.position.z);
 
 		lifeTimer -= Time.deltaTime;
-		if (lifeTimer < 0) GameObject.Destroy(gameObject);
+		if (lifeTimer < 0) PoolManager.instance.destroyInstance(GetComponent<PoolInstance>());
 	}
 
 	void OnTriggerEnter2D(Collider2D other)
@@ -43,7 +43,7 @@ public class Bullet : MonoBehaviour
 		if (other.CompareTag(TagNames.Asteroid))
 		{
 			Asteroid asteroid = other.GetComponent<Asteroid>();
-			asteroid.hit();
+			asteroid.hit(cachedTransform.position, direction);
 
 			CustomParticleEmitter customParticleEmitter = new CustomParticleEmitter();
 
@@ -51,7 +51,9 @@ public class Bullet : MonoBehaviour
 			customParticleEmitter.explode(cachedTransform.position, -direction);
 
 			player.addScore(asteroid.score);
-			GameObject.Destroy(gameObject);
+			PoolManager.instance.destroyInstance(GetComponent<PoolInstance>());
+
+			gameCamera.shake(0.25f, 0.25f);
 		}
 	}
 }

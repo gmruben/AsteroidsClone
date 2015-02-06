@@ -3,12 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 public class PoolManager : MonoBehaviour
 {
-	private const int numBullets = 50;
-
-	private PoolInstance[] bulletList;
 	private static PoolManager _instance;
 
-	private static Dictionary<string, PoolData> poolList;
+	private static Dictionary<string, PoolData> poolList = new Dictionary<string, PoolData> ();
 	
 	public static PoolManager instance
 	{
@@ -22,44 +19,6 @@ public class PoolManager : MonoBehaviour
 			return _instance;
 		}
 	}
-
-	public void init()
-	{
-		GameObject bulletPrefab = Resources.Load<GameObject>("Prefabs/Bullet");
-
-		//Create the pool for the bullets
-		bulletList = new PoolInstance[numBullets]; 
-		for (int i = 0; i < numBullets; i++)
-		{
-			//The pool only operates with PoolInstance objects
-			PoolInstance bullet = (GameObject.Instantiate(bulletPrefab) as GameObject).GetComponent<PoolInstance>();
-
-			bullet.init();
-			bullet.transform.parent = transform;
-
-			bulletList[i] = bullet;
-		}
-
-		//Initialize pool dictionary
-		poolList = new Dictionary<string, PoolData> ();
-	}
-
-	public Bullet getBulletInstance()
-	{
-		for (int i = 0; i < numBullets; i++)
-		{
-			if (!bulletList[i].isAlive)
-			{
-				//When getting the actual object, we return the specific component (could be a generic if we needed different components)
-				bulletList[i].revive();
-				return bulletList[i].GetComponent<Bullet>();
-			}
-		}
-
-		Debug.LogWarning("THERE ARE NO BULLET INSTANCES AVAILABLE");
-		return null;
-	}
-
 
 	public void createPool(string poolId, GameObject prefab, int numInstances)
 	{
@@ -86,12 +45,17 @@ public class PoolManager : MonoBehaviour
 	{
 		PoolData poolData = poolList[poolId];
 
-		for (int i = 0; i < poolData.numInstances; i++)
+		//Start from the last instance index and iterate through all the instances
+		for (int i = poolData.instanceIndex; i < poolData.instanceIndex + poolData.numInstances; i++)
 		{
-			if (!poolData.instanceList[i].isAlive)
+			int index = (i < poolData.numInstances) ? i : i % poolData.numInstances;
+			if (!poolData.instanceList[index].isAlive)
 			{
-				poolData.instanceList[i].revive();
-				return poolData.instanceList[i];
+				//Revive the instance and store the index as the last instance used
+				poolData.instanceList[index].revive();
+				poolData.instanceIndex = index;
+
+				return poolData.instanceList[index];
 			}
 		}
 
@@ -99,9 +63,16 @@ public class PoolManager : MonoBehaviour
 		return null;
 	}
 
+	public void destroyInstance(PoolInstance instance)
+	{
+		instance.kill();
+	}
+
 	private class PoolData
 	{
 		public int numInstances;
+		public int instanceIndex = 0;
+
 		public PoolInstance[] instanceList;
 	}
 }

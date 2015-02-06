@@ -32,7 +32,14 @@ public class CustomParticle : MonoBehaviour
 	{
 		life -= Time.deltaTime * 2.5f;
 
-		cachedTransform.position += new Vector3(direction.x, direction.y, 0) * speed * Time.deltaTime;
-		spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, life);
+		if (life <= 0)
+		{
+			PoolManager.instance.destroyInstance(GetComponent<PoolInstance>());
+		}
+		else
+		{
+			cachedTransform.position += new Vector3(direction.x, direction.y, 0) * speed * Time.deltaTime;
+			spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, life);
+		}
 	}
 }

@@ -3,7 +3,7 @@ using System.Collections;
 
 public class PlayerController
 {
-	private const float acceleration = 5.0f;
+	private const float acceleration = 15.0f;
 	private const float maxSpeed = 25.0f;
 
 	private const float angularSpeed = 100.0f;
@@ -34,6 +34,9 @@ public class PlayerController
 		if (playerInput.isKey(PlayerInputKeyIds.Up)) deltaSpeed = new Vector3(playerTransform.up.x, playerTransform.up.y, 0) * acceleration * deltaTime;
 
 		speed += deltaSpeed;
+
+		//Clamp speed
+		if (speed.sqrMagnitude > maxSpeed * maxSpeed) speed = speed.normalized * maxSpeed;
 
 		playerTransform.position += new Vector3(speed.x, speed.y, 0) * deltaTime;
 		playerTransform.Rotate(Vector3.back, angSpeed);

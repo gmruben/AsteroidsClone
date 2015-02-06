@@ -14,7 +14,7 @@ public class MainMenu : UIMenu
 
 	private void onPlayButtonClick()
 	{
-		Application.LoadLevel ("Game");
+		App.instance.showGameMenu();
 	}
 
 	private void onQuitButtonClick()

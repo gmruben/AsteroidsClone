@@ -27,7 +27,7 @@ public class Player : MonoBehaviour
 	{
 		this.game = game;
 
-		playerInput = new PlayerInput(KeyCode.J, KeyCode.L, KeyCode.I, KeyCode.K);
+		playerInput = new PlayerInput(KeyCode.LeftArrow, KeyCode.RightArrow, KeyCode.UpArrow, KeyCode.DownArrow);
 		cachedTransform = transform;
 
 		gameCamera.init();

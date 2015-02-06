@@ -3,5 +3,5 @@ using System.Collections;
 
 public interface IAsteroid
 {
-	void hit();
+	void hit(Vector3 position, Vector3 direction);
 }

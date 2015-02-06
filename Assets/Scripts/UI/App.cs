@@ -33,16 +33,27 @@ public class App : MonoBehaviour
 		
 	}
 
-	/*public void showArcadeModeMenu()
+	public void showGameMenu()
 	{
 		UIMenu currentMenu = menus.Peek();
 		currentMenu.setActive(false);
 
-		ArcadeModeMenu arcadeModeMenu = MenuManager.instantiateArcadeModeMenu();
-		arcadeModeMenu.init();
+		GameMenu gameMenu = MenuManager.instantiateGameMenu();
+		gameMenu.init();
 		
-		menus.Push(arcadeModeMenu);
-	}*/
+		menus.Push(gameMenu);
+	}
+
+	public void showMultiPlayerModeMenu()
+	{
+		UIMenu currentMenu = menus.Peek();
+		currentMenu.setActive(false);
+		
+		MultiPlayerModeMenu multiPlayerModeMenu = MenuManager.instantiateMultiPlayerModeMenu();
+		multiPlayerModeMenu.init();
+		
+		menus.Push(multiPlayerModeMenu);
+	}
 
 	public void back()
 	{

@@ -3,12 +3,21 @@ using System.Collections;
 
 public class Game : MonoBehaviour
 {
+	public GameCamera gameCamera;
+
 	public GameHUD gameHUD;
 	public Player player;
+
+	public AsteroidManager asteroidManager;
 
 	void Awake()
 	{
 		init ();
+	}
+
+	void Update()
+	{
+		asteroidManager.update(Time.deltaTime);
 	}
 
 	public void init()
@@ -16,19 +25,23 @@ public class Game : MonoBehaviour
 		player.init(this);
 		gameHUD.init();
 
+		asteroidManager.init(gameCamera, new LevelConfig());
+		asteroidManager.onEnd += onAsteroidManagerEnd;
+
 		//Create pool instances for all the items that are going to be instantiated intensively
-		GameObject bulletPrefab = GameObject.Instantiate(Resources.Load("Prefabs/Bullet")) as GameObject;
-		PoolManager.instance.createPool ("bullet", bulletPrefab, 50);
-
-		GameObject heavyBulletPrefab = GameObject.Instantiate(Resources.Load("Prefabs/HeavyBullet")) as GameObject;
-		PoolManager.instance.createPool ("heavyBullet", heavyBulletPrefab, 50);
-
-		GameObject particlePrefab = GameObject.Instantiate(Resources.Load("Prefabs/Particle")) as GameObject;
-		PoolManager.instance.createPool ("particle", particlePrefab, 150);
+		PoolManager.instance.createPool ("bullet", Resources.Load("Prefabs/Bullet") as GameObject, 50);
+		PoolManager.instance.createPool ("heavyBullet", Resources.Load("Prefabs/HeavyBullet") as GameObject, 50);
+		PoolManager.instance.createPool ("asteroid", Resources.Load("Prefabs/Asteroid") as GameObject, 50);
+		PoolManager.instance.createPool ("particle", Resources.Load("Prefabs/Particle") as GameObject, 150);
 	}
 
 	public void updateScore(int playerIndex, int score)
 	{
 		gameHUD.updateScore(score);
+	}
+
+	private void onAsteroidManagerEnd()
+	{
+		Debug.Log("YAY!");
 	}
 }
