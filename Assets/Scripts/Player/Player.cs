@@ -1,8 +1,11 @@
 using UnityEngine;
+using System;
 using System.Collections;
 
 public class Player : MonoBehaviour
 {
+	public event Action onDead;
+
 	public GameCamera gameCamera;
 	public PlayerTimer timer;
 
@@ -17,10 +20,15 @@ public class Player : MonoBehaviour
 	private Game game;
 	private int score;
 
+	private bool isActive = true;
+
 	void Update()
 	{
-		playerController.update(Time.deltaTime);
-		weaponController.update(Time.deltaTime);
+		if (isActive)
+		{
+			playerController.update(Time.deltaTime);
+			weaponController.update(Time.deltaTime);
+		}
 	}
 
 	public void init(Game game)
@@ -36,6 +44,8 @@ public class Player : MonoBehaviour
 		weaponController = new GunController(gameCamera, playerInput, this);
 
 		score = 0;
+
+		MessageBus.onGamePause += onGamePause;
 	}
 
 	public void changeShootController(IWeaponController controller)
@@ -49,6 +59,17 @@ public class Player : MonoBehaviour
 		{
 			other.GetComponent<PowerUp>().pickUp(this);
 		}
+		else if (other.CompareTag(TagNames.Asteroid))
+		{
+			other.GetComponent<Asteroid>().kill();
+
+			CustomParticleEmitter customParticleEmitter = new CustomParticleEmitter();
+			
+			customParticleEmitter.init();
+			customParticleEmitter.explode2(cachedTransform.position);
+
+			if (onDead != null) onDead();
+		}
 	}
 
 	public void setTimer(float time)
@@ -60,5 +81,10 @@ public class Player : MonoBehaviour
 	{
 		this.score += score;
 		game.updateScore(0, this.score);
+	}
+
+	private void onGamePause(bool isPause)
+	{
+		isActive = !isPause;
 	}
 }

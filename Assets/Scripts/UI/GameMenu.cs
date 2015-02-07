@@ -5,6 +5,7 @@ public class GameMenu : UIMenu
 {
 	public UIButton singleModeButton;
 	public UIButton multiModeButton;
+	public UIButton gameConfigButton;
 
 	public UIButton backButton;
 
@@ -12,19 +13,24 @@ public class GameMenu : UIMenu
 	{
 		singleModeButton.onClick += onSingleModeButtonClick;
 		multiModeButton.onClick += onMultiModeButtonClick;
+		gameConfigButton.onClick += onGameConfigButtonClick;
 
 		backButton.onClick += onBackButtonClick;
 	}
 
 	private void onSingleModeButtonClick()
 	{
-
 		Application.LoadLevel("Game");
 	}
 
 	private void onMultiModeButtonClick()
 	{
 		App.instance.showMultiPlayerModeMenu();
+	}
+
+	private void onGameConfigButtonClick()
+	{
+		App.instance.showGameConfigMenu();
 	}
 
 	private void onBackButtonClick()

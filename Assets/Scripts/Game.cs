@@ -10,6 +10,8 @@ public class Game : MonoBehaviour
 
 	public AsteroidManager asteroidManager;
 
+	private GameOverMenu gameOverMenu;
+
 	void Awake()
 	{
 		init ();
@@ -24,6 +26,8 @@ public class Game : MonoBehaviour
 	{
 		player.init(this);
 		gameHUD.init();
+
+		player.onDead += onPlayerDead;
 
 		asteroidManager.init(gameCamera, new LevelConfig());
 		asteroidManager.onEnd += onAsteroidManagerEnd;
@@ -43,5 +47,44 @@ public class Game : MonoBehaviour
 	private void onAsteroidManagerEnd()
 	{
 		Debug.Log("YAY!");
+	}
+
+	private void onPlayerDead()
+	{
+		MessageBus.dispatchGamePause(true);
+
+		//We use a coroutine to delay the Game Over Menu a bit after the death
+		StartCoroutine(showGameOverMenu());
+	}
+
+	private IEnumerator showGameOverMenu()
+	{
+		yield return new WaitForSeconds(0.5f);
+
+		gameOverMenu = MenuManager.instantiateGameOverMenu();
+		gameOverMenu.init();
+		
+		gameOverMenu.retryButton.onClick += onRetryButtonClick;
+		gameOverMenu.mainMenuButton.onClick += onMainMenuButtonClick;
+	}
+
+	private void onRetryButtonClick()
+	{
+		GameObject.Destroy(gameOverMenu.gameObject);
+		gameOverMenu.retryButton.onClick += onRetryButtonClick;
+
+		//RETRY
+	}
+
+	private void onMainMenuButtonClick()
+	{
+		GameObject.Destroy(gameOverMenu.gameObject);
+		gameOverMenu.retryButton.onClick += onRetryButtonClick;
+
+		//Remove all the pools of objects
+		PoolManager.instance.removePool("bullet");
+		PoolManager.instance.removePool("heavyBullet");
+		PoolManager.instance.removePool("asteroid");
+		PoolManager.instance.removePool("particle");
 	}
 }

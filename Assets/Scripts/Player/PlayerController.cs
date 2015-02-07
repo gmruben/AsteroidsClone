@@ -3,10 +3,10 @@ using System.Collections;
 
 public class PlayerController
 {
-	private const float acceleration = 15.0f;
-	private const float maxSpeed = 25.0f;
+	private float acceleration;
+	private float maxSpeed;
 
-	private const float angularSpeed = 100.0f;
+	private float angularSpeed;
 
 	private GameCamera gameCamera;
 	private PlayerInput playerInput;
@@ -19,6 +19,11 @@ public class PlayerController
 		this.gameCamera = gameCamera;
 		this.playerInput = playerInput;
 		this.playerTransform = playerTransform;
+
+		//Get the parameters from game config
+		acceleration = GameConfig.instance.retrieveParamValue<float>(GameConfigParamIds.PlayerAcceleration);
+		maxSpeed = GameConfig.instance.retrieveParamValue<float>(GameConfigParamIds.PlayerMaxSpeed);
+		angularSpeed = GameConfig.instance.retrieveParamValue<float>(GameConfigParamIds.PlayerAngularSpeed);
 
 		speed = Vector2.zero;
 	}

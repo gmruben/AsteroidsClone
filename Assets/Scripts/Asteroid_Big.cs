@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Asteroid : MonoBehaviour, IAsteroid
+public class Asteroid_Big : Asteroid
 {
 	public int score = 5;
 	private const float speed = 5.0f;
@@ -15,29 +15,6 @@ public class Asteroid : MonoBehaviour, IAsteroid
 
 	private bool isActive = true;
 
-	void Awake()
-	{
-		cachedTransform = transform;
-		MessageBus.onGamePause += onGamePause;
-	}
-
-	void Update()
-	{
-		if (isActive)
-		{
-			cachedTransform.position += direction * speed * Time.deltaTime;
-			warpController.checkWarp();
-		}
-	}
-
-	public void init(GameCamera gameCamera, Vector3 position, Vector3 direction)
-	{
-		this.gameCamera = gameCamera;
-		this.direction = direction;
-
-		cachedTransform.position = position;
-		warpController = new WarpController(gameCamera, cachedTransform);
-	}
 
 	public void hit(Vector3 position, Vector3 direction)
 	{

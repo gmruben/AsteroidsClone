@@ -55,6 +55,17 @@ public class App : MonoBehaviour
 		menus.Push(multiPlayerModeMenu);
 	}
 
+	public void showGameConfigMenu()
+	{
+		UIMenu currentMenu = menus.Peek();
+		currentMenu.setActive(false);
+		
+		GameConfigMenu gameConfigMenuMenu = MenuManager.instantiateGameConfigMenu();
+		gameConfigMenuMenu.init();
+		
+		menus.Push(gameConfigMenuMenu);
+	}
+
 	public void back()
 	{
 		UIMenu menu = menus.Pop();

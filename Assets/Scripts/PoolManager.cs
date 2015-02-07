@@ -41,6 +41,15 @@ public class PoolManager : MonoBehaviour
 		poolList.Add (poolId, poolData);
 	}
 
+	public void removePool(string poolId)
+	{
+		PoolData poolData = poolList[poolId];
+		for (int i = 0; i < poolData.numInstances; i++)
+		{
+			GameObject.Destroy(poolData.instanceList[i].gameObject);
+		}
+	}
+
 	public PoolInstance retrievePoolInstance(string poolId)
 	{
 		PoolData poolData = poolList[poolId];
