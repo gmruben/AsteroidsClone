@@ -25,9 +25,21 @@ public class GameConfig
 
 	public void init()
 	{
+		//PLAYER
 		parameterList.Add (GameConfigParamIds.PlayerAcceleration, "15.0");
 		parameterList.Add (GameConfigParamIds.PlayerMaxSpeed, "25.0");
-		parameterList.Add (GameConfigParamIds.PlayerAngularSpeed, "100.0");
+		parameterList.Add (GameConfigParamIds.PlayerAngularSpeed, "150.0");
+
+		//WEAPONS
+		parameterList.Add (GameConfigParamIds.GunCoolDownTime, "0.5");
+
+		//ASTEROIDS
+		parameterList.Add (GameConfigParamIds.AsteroidSmallScore, "50");
+		parameterList.Add (GameConfigParamIds.AsteroidSmallSpeed, "15.0");
+		parameterList.Add (GameConfigParamIds.AsteroidMediumScore, "25");
+		parameterList.Add (GameConfigParamIds.AsteroidMediumSpeed, "10.0");
+		parameterList.Add (GameConfigParamIds.AsteroidBigScore, "10");
+		parameterList.Add (GameConfigParamIds.AsteroidBigSpeed, "5.0");
 	}
 
 	public void storeValue(string id, string value)
@@ -76,7 +88,19 @@ public class GameConfig
 
 public class GameConfigParamIds
 {
+	//PLAYER
 	public static string PlayerAcceleration = "PlayerAcceleration";
 	public static string PlayerAngularSpeed = "PlayerAngularSpeed";
 	public static string PlayerMaxSpeed = "PlayerMaxSpeed";
+
+	//WEAPONS
+	public static string GunCoolDownTime = "GunCoolDownTime";
+
+	//ASTEROIDS
+	public static string AsteroidSmallScore = "AsteroidSmallScore";
+	public static string AsteroidSmallSpeed = "AsteroidSmallSpeed";
+	public static string AsteroidMediumScore = "AsteroidMediumScore";
+	public static string AsteroidMediumSpeed = "AsteroidMediumSpeed";
+	public static string AsteroidBigScore = "AsteroidBigScore";
+	public static string AsteroidBigSpeed = "AsteroidBigSpeed";
 }

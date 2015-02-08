@@ -5,11 +5,6 @@ public class CustomParticleEmitter
 {
 	private const int numParticles = 25;
 
-	public void init()
-	{
-
-	}
-
 	public void explode(Vector3 position, Vector2 direction)
 	{
 		for (int i = 0; i < numParticles; i++)

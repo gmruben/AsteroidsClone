@@ -7,16 +7,14 @@ public class PlayerController
 	private float maxSpeed;
 
 	private float angularSpeed;
-
-	private GameCamera gameCamera;
+	
 	private PlayerInput playerInput;
 	private Transform playerTransform;
 
 	private Vector2 speed;
 
-	public PlayerController(GameCamera gameCamera, PlayerInput playerInput, Transform playerTransform)
+	public PlayerController(PlayerInput playerInput, Transform playerTransform)
 	{
-		this.gameCamera = gameCamera;
 		this.playerInput = playerInput;
 		this.playerTransform = playerTransform;
 
@@ -46,9 +44,14 @@ public class PlayerController
 		playerTransform.position += new Vector3(speed.x, speed.y, 0) * deltaTime;
 		playerTransform.Rotate(Vector3.back, angSpeed);
 
-		Vector3 point = gameCamera.camera.WorldToViewportPoint(playerTransform.position);
+		Vector3 point = GameCamera.instance.camera.WorldToViewportPoint(playerTransform.position);
 
 		if (point.x < 0.0f || point.x > 1.0f) playerTransform.position = new Vector3(-playerTransform.position.x, playerTransform.position.y, playerTransform.position.z);
 		if (point.y < 0.0f || point.y > 1.0f) playerTransform.position = new Vector3(playerTransform.position.x, -playerTransform.position.y, playerTransform.position.z);
+	}
+
+	public void reset()
+	{
+		speed = Vector2.zero;
 	}
 }

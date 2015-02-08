@@ -8,8 +8,6 @@ public class PowerUp_HeavyMachineGun : PowerUp
 	private bool isActive = false;
 	private float time;
 
-	public GameCamera gameCamera;
-
 	public override void pickUp(Player player)
 	{
 		this.player = player;
@@ -18,7 +16,7 @@ public class PowerUp_HeavyMachineGun : PowerUp
 		time = 2.5f;
 
 		player.setTimer(2.5f);
-		player.changeShootController(new HeavyMachineGunController(gameCamera, player.playerInput, player));
+		player.changeShootController(new HeavyMachineGunController(player.playerInput, player));
 
 		sprite.gameObject.SetActive(false);
 	}
@@ -34,7 +32,7 @@ public class PowerUp_HeavyMachineGun : PowerUp
 
 	public void end()
 	{
-		player.changeShootController(new GunController(gameCamera, player.playerInput, player));
+		player.changeShootController(new GunController(player.playerInput, player));
 		GameObject.Destroy(gameObject);
 	}
 }

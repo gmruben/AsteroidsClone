@@ -3,16 +3,14 @@ using System.Collections;
 
 public class MachineGunController : IWeaponController
 {
-	private GameCamera gameCamera;
 	private PlayerInput playerInput;
 	private Player player;
 
 	private bool isOn = false;
 	private float coolDown = 0;
 	
-	public MachineGunController(GameCamera gameCamera, PlayerInput playerInput, Player player)
+	public MachineGunController(PlayerInput playerInput, Player player)
 	{
-		this.gameCamera = gameCamera;
 		this.playerInput = playerInput;
 		this.player = player;
 	}
@@ -50,7 +48,7 @@ public class MachineGunController : IWeaponController
 	{
 		Bullet bullet = EntityManager.instantiateBullet();
 		
-		bullet.init(gameCamera, player, direction);
+		bullet.init(player, direction);
 		bullet.transform.position = player.cachedTransform.position;
 	}
 }

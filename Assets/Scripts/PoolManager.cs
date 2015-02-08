@@ -20,6 +20,15 @@ public class PoolManager : MonoBehaviour
 		}
 	}
 
+	public void clearPoolList()
+	{
+		foreach(KeyValuePair<string, PoolData> pair in poolList)
+		{
+			removePool(pair.Key);
+		}
+		poolList.Clear();
+	}
+
 	public void createPool(string poolId, GameObject prefab, int numInstances)
 	{
 		PoolData poolData = new PoolData ();
@@ -41,7 +50,7 @@ public class PoolManager : MonoBehaviour
 		poolList.Add (poolId, poolData);
 	}
 
-	public void removePool(string poolId)
+	private void removePool(string poolId)
 	{
 		PoolData poolData = poolList[poolId];
 		for (int i = 0; i < poolData.numInstances; i++)

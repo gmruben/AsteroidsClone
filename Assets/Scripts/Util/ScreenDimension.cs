@@ -24,7 +24,17 @@ public class ScreenDimension
 			return _screenSize;
 		}
 	}
-	
+
+	public static float screenWidth
+	{
+		get { return screenSize * sizeX; }
+	}
+
+	public static float screenHeight
+	{
+		get { return screenSize * sizeY; }
+	}
+
 	public static float screenTop
 	{
 		get { return UIManager.instance.camera.orthographicSize / screenSize; }

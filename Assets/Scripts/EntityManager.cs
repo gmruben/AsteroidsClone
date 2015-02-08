@@ -3,6 +3,12 @@ using System.Collections;
 
 public class EntityManager
 {
+	public static Player instantiatePlayer()
+	{
+		GameObject resource = Resources.Load<GameObject>("Prefabs/Player");
+		return (GameObject.Instantiate(resource) as GameObject).GetComponent<Player>();
+	}
+
 	public static Bullet instantiateBullet()
 	{
 		return PoolManager.instance.retrievePoolInstance ("bullet").GetComponent<Bullet>();
@@ -18,8 +24,14 @@ public class EntityManager
 		return PoolManager.instance.retrievePoolInstance ("particle").GetComponent<CustomParticle>();
 	}
 
-	public static Asteroid instantiateAsteroid()
+	public static Asteroid instantiateAsteroid(string id)
 	{
-		return PoolManager.instance.retrievePoolInstance ("asteroid").GetComponent<Asteroid>();
+		return PoolManager.instance.retrievePoolInstance (id).GetComponent<Asteroid>();
+	}
+
+	public static PowerUp instantiatePowerUp(string id)
+	{
+		GameObject resource = Resources.Load<GameObject>("Prefabs/PowerUp_HeavyMachineGun");
+		return (GameObject.Instantiate(resource) as GameObject).GetComponent<PowerUp>();
 	}
 }

@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class GameHUD : MonoBehaviour
+public class GameHUD : UIMenu
 {
 	public Text score;
 	public Text lives;

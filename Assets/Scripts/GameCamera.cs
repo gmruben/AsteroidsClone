@@ -9,6 +9,22 @@ public class GameCamera : MonoBehaviour
 	private Transform cachedTransform;
 	private Vector3 initialPosition;
 
+	private static GameCamera _instance;
+
+	public static GameCamera instance
+	{
+		get
+		{
+			if (_instance == null)
+			{
+				_instance = GameObject.FindGameObjectWithTag(TagNames.GameCamera).GetComponent<GameCamera>();
+				_instance.init();
+			}
+
+			return _instance;
+		}
+	}
+
 	public void shake(float time, float intensity)
 	{
 		this.time = time;

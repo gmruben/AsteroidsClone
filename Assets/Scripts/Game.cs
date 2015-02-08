@@ -3,14 +3,16 @@ using System.Collections;
 
 public class Game : MonoBehaviour
 {
-	public GameCamera gameCamera;
-
 	public GameHUD gameHUD;
-	public Player player;
+	private Player player;
 
 	public AsteroidManager asteroidManager;
+	public PowerUpManager powerUpManager;
 
 	private GameOverMenu gameOverMenu;
+	private bool isActive = true;
+
+	private int score;
 
 	void Awake()
 	{
@@ -19,29 +21,52 @@ public class Game : MonoBehaviour
 
 	void Update()
 	{
-		asteroidManager.update(Time.deltaTime);
+		if (isActive)
+		{
+			asteroidManager.update(Time.deltaTime);
+			powerUpManager.update(Time.deltaTime);
+		}
 	}
 
 	public void init()
 	{
-		player.init(this);
 		gameHUD.init();
+
+		player = EntityManager.instantiatePlayer();
+		player.init(this);
 
 		player.onDead += onPlayerDead;
 
-		asteroidManager.init(gameCamera, new LevelConfig());
+		LevelConfig levelConfig = new LevelConfig();
+
+		levelConfig.spawnTime = 5;
+		levelConfig.numAsteroids = 3;
+
+		asteroidManager.init(levelConfig);
 		asteroidManager.onEnd += onAsteroidManagerEnd;
+
+		powerUpManager.init();
+
+		score = 0;
 
 		//Create pool instances for all the items that are going to be instantiated intensively
 		PoolManager.instance.createPool ("bullet", Resources.Load("Prefabs/Bullet") as GameObject, 50);
 		PoolManager.instance.createPool ("heavyBullet", Resources.Load("Prefabs/HeavyBullet") as GameObject, 50);
+		PoolManager.instance.createPool ("particle", Resources.Load("Prefabs/Particle") as GameObject, 500);
+
 		PoolManager.instance.createPool ("asteroid", Resources.Load("Prefabs/Asteroid") as GameObject, 50);
-		PoolManager.instance.createPool ("particle", Resources.Load("Prefabs/Particle") as GameObject, 150);
+		PoolManager.instance.createPool ("asteroid_medium", Resources.Load("Prefabs/Asteroid_Medium") as GameObject, 50);
+		PoolManager.instance.createPool ("asteroid_small", Resources.Load("Prefabs/Asteroid_Small") as GameObject, 50);
 	}
 
 	public void updateScore(int playerIndex, int score)
 	{
 		gameHUD.updateScore(score);
+	}
+
+	public void updateLives(int playerIndex, int lives)
+	{
+		gameHUD.updateLives(lives);
 	}
 
 	private void onAsteroidManagerEnd()
@@ -51,10 +76,20 @@ public class Game : MonoBehaviour
 
 	private void onPlayerDead()
 	{
+		isActive = false;
 		MessageBus.dispatchGamePause(true);
 
 		//We use a coroutine to delay the Game Over Menu a bit after the death
 		StartCoroutine(showGameOverMenu());
+	}
+
+	private void endGame()
+	{
+		player.reset(Vector3.zero);
+		asteroidManager.clear();
+
+		isActive = true;
+		MessageBus.dispatchGamePause(false);
 	}
 
 	private IEnumerator showGameOverMenu()
@@ -73,7 +108,7 @@ public class Game : MonoBehaviour
 		GameObject.Destroy(gameOverMenu.gameObject);
 		gameOverMenu.retryButton.onClick += onRetryButtonClick;
 
-		//RETRY
+		endGame();
 	}
 
 	private void onMainMenuButtonClick()
@@ -81,10 +116,7 @@ public class Game : MonoBehaviour
 		GameObject.Destroy(gameOverMenu.gameObject);
 		gameOverMenu.retryButton.onClick += onRetryButtonClick;
 
-		//Remove all the pools of objects
-		PoolManager.instance.removePool("bullet");
-		PoolManager.instance.removePool("heavyBullet");
-		PoolManager.instance.removePool("asteroid");
-		PoolManager.instance.removePool("particle");
+		//Clear the pool manager
+		PoolManager.instance.clearPoolList();
 	}
 }

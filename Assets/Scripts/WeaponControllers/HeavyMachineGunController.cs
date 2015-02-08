@@ -3,16 +3,14 @@ using System.Collections;
 
 public class HeavyMachineGunController : IWeaponController
 {
-	private GameCamera gameCamera;
 	private PlayerInput playerInput;
 	private Player player;
 
 	private bool isOn = false;
 	private float coolDown = 0;
 	
-	public HeavyMachineGunController(GameCamera gameCamera, PlayerInput playerInput, Player player)
+	public HeavyMachineGunController(PlayerInput playerInput, Player player)
 	{
-		this.gameCamera = gameCamera;
 		this.playerInput = playerInput;
 		this.player = player;
 	}
@@ -53,9 +51,9 @@ public class HeavyMachineGunController : IWeaponController
 		float randomAngle = Random.Range(-5.0f, 5.0f);
 		Vector2 bulletDirection = Quaternion.AngleAxis(randomAngle, Vector3.back) * direction;
 
-		bullet.init(gameCamera, player, bulletDirection);
+		bullet.init(player, bulletDirection);
 		bullet.transform.position = player.cachedTransform.position;
 
-		gameCamera.shake(0.25f, 0.75f);
+		GameCamera.instance.shake(0.25f, 0.75f);
 	}
 }
