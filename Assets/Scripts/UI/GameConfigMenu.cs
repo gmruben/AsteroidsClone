@@ -13,12 +13,15 @@ public class GameConfigMenu : UIMenu
 	{
 		backButton.onClick += onBackButtonClick;
 
+		//Add here all the game config parameters that we want to be editable in the build
 		List<GameConfigData> paramIdList = new List<GameConfigData> ();
 
 		//PLAYER
 		paramIdList.Add (new GameConfigData (GameConfigParamIds.PlayerAcceleration, "PLAYER ACCELERATION", ""));
 		paramIdList.Add (new GameConfigData (GameConfigParamIds.PlayerMaxSpeed, "PLAYER MAX SPEED", ""));
 		paramIdList.Add (new GameConfigData (GameConfigParamIds.PlayerAngularSpeed, "PLAYER ANGULAR SPEED", ""));
+		paramIdList.Add (new GameConfigData (GameConfigParamIds.PlayerInvulnerableTime, "PLAYER INVULNERABLE TIME", ""));
+		paramIdList.Add (new GameConfigData (GameConfigParamIds.PlayerNumLifes, "PLAYER NUMBER OF LIFES", ""));
 
 		//WEAPONS
 		paramIdList.Add (new GameConfigData (GameConfigParamIds.GunCoolDownTime, "GUN COOLDOWN TIME", ""));
@@ -32,6 +35,11 @@ public class GameConfigMenu : UIMenu
 		paramIdList.Add (new GameConfigData (GameConfigParamIds.AsteroidBigSpeed, "BIG ASTEROID SPEED", ""));
 
 		itemList.init (paramIdList);
+	}
+
+	public override void setEnabled (bool isEnabled)
+	{
+
 	}
 
 	private void onBackButtonClick()

@@ -29,6 +29,8 @@ public class GameConfig
 		parameterList.Add (GameConfigParamIds.PlayerAcceleration, "15.0");
 		parameterList.Add (GameConfigParamIds.PlayerMaxSpeed, "25.0");
 		parameterList.Add (GameConfigParamIds.PlayerAngularSpeed, "150.0");
+		parameterList.Add (GameConfigParamIds.PlayerInvulnerableTime, "2.5");
+		parameterList.Add (GameConfigParamIds.PlayerNumLifes, "3");
 
 		//WEAPONS
 		parameterList.Add (GameConfigParamIds.GunCoolDownTime, "0.5");
@@ -92,6 +94,8 @@ public class GameConfigParamIds
 	public static string PlayerAcceleration = "PlayerAcceleration";
 	public static string PlayerAngularSpeed = "PlayerAngularSpeed";
 	public static string PlayerMaxSpeed = "PlayerMaxSpeed";
+	public static string PlayerInvulnerableTime = "PlayerInvulnerableTime";
+	public static string PlayerNumLifes = "PlayerNumLifes";
 
 	//WEAPONS
 	public static string GunCoolDownTime = "GunCoolDownTime";

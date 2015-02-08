@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class AsteroidManager : MonoBehaviour
+public class AsteroidManager : MonoBehaviour, IUpdatable
 {
 	public event Action onEnd;
 
@@ -27,20 +27,17 @@ public class AsteroidManager : MonoBehaviour
 
 	public void update(float time)
 	{
-		if (asteroidCounter < levelConfig.numAsteroids)
+		spawnCounter += time;
+		if (spawnCounter > levelConfig.spawnTime)
 		{
-			spawnCounter += time;
-			if (spawnCounter > levelConfig.spawnTime)
-			{
-				spawnCounter = 0;
-				asteroidCounter++;
+			spawnCounter = 0;
+			asteroidCounter++;
 
-				int randomIndex = UnityEngine.Random.Range(0, spawnPointList.Length);
-				Vector3 position = spawnPointList[randomIndex].position;
-				Vector3 direction = spawnPointList[randomIndex].up;
+			int randomIndex = UnityEngine.Random.Range(0, spawnPointList.Length);
+			Vector3 position = spawnPointList[randomIndex].position;
+			Vector3 direction = spawnPointList[randomIndex].up;
 
-				instantiateAsteroid("asteroid", position, direction);
-			}
+			instantiateAsteroid("asteroid", position, direction);
 		}
 	}
 

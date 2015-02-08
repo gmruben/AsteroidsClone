@@ -8,14 +8,16 @@ public class PlayerController
 
 	private float angularSpeed;
 	
-	private PlayerInput playerInput;
+	private PlayerInput inputController;
+	private PlayerAnimator playerAnimator;
 	private Transform playerTransform;
 
 	private Vector2 speed;
 
-	public PlayerController(PlayerInput playerInput, Transform playerTransform)
+	public PlayerController(PlayerInput playerInput, PlayerAnimator playerAnimator, Transform playerTransform)
 	{
-		this.playerInput = playerInput;
+		this.inputController = playerInput;
+		this.playerAnimator = playerAnimator;
 		this.playerTransform = playerTransform;
 
 		//Get the parameters from game config
@@ -30,13 +32,14 @@ public class PlayerController
 	{
 		float angSpeed = 0;
 
-		if (playerInput.isKey(PlayerInputKeyIds.Left)) angSpeed = -angularSpeed * deltaTime;
-		else if (playerInput.isKey(PlayerInputKeyIds.Right)) angSpeed = angularSpeed * deltaTime;
+		if (inputController.isKey(PlayerInputKeyIds.Left)) angSpeed = -angularSpeed * deltaTime;
+		else if (inputController.isKey(PlayerInputKeyIds.Right)) angSpeed = angularSpeed * deltaTime;
 
 		Vector2 deltaSpeed = Vector2.zero;
-		if (playerInput.isKey(PlayerInputKeyIds.Up)) deltaSpeed = new Vector3(playerTransform.up.x, playerTransform.up.y, 0) * acceleration * deltaTime;
+		if (inputController.isKey(PlayerInputKeyIds.Up)) deltaSpeed = new Vector3(playerTransform.up.x, playerTransform.up.y, 0) * acceleration * deltaTime;
 
 		speed += deltaSpeed;
+		playerAnimator.thrust(deltaSpeed != Vector2.zero);
 
 		//Clamp speed
 		if (speed.sqrMagnitude > maxSpeed * maxSpeed) speed = speed.normalized * maxSpeed;

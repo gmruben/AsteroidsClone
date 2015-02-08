@@ -5,22 +5,30 @@ using System.Collections;
 public class Player : MonoBehaviour
 {
 	public event Action onDead;
-	
+
+	public GameObject graphic;
 	public PlayerTimer timer;
 
 	private PlayerController playerController;
 	private IWeaponController weaponController;
 	
 	[HideInInspector]
-	public PlayerInput playerInput;
-	[HideInInspector]
 	public Transform cachedTransform;
 
-	private Game game;
-	private int score;
-	private int numLifes;
+	public PlayerAnimator playerAnimator;
+
+	private GameModeController gameController;
+
+	public int score { get; private set; }
+	public int numLives { get; private set; }
 
 	private bool isActive = true;
+
+	private bool isInvulnerable = false;
+	private float invulnerableTime;
+	private float invulnerableCounter;
+
+	private PlayerConfig playerConfig;
 
 	void Update()
 	{
@@ -28,24 +36,32 @@ public class Player : MonoBehaviour
 		{
 			playerController.update(Time.deltaTime);
 			weaponController.update(Time.deltaTime);
+
+			if (isInvulnerable)
+			{
+				invulnerableCounter -= Time.deltaTime;
+				if (invulnerableCounter <= 0)
+				{
+					isInvulnerable = false;
+					playerAnimator.setInvulnerable(false);
+				}
+			}
 		}
 	}
 
-	public void init(Game game)
+	public void init(GameModeController gameController, PlayerConfig playerConfig)
 	{
-		this.game = game;
+		this.gameController = gameController;
+		this.playerConfig = playerConfig;
 
-		playerInput = new PlayerInput(KeyCode.LeftArrow, KeyCode.RightArrow, KeyCode.UpArrow, KeyCode.DownArrow);
 		cachedTransform = transform;
 
-		playerController = new PlayerController(playerInput, cachedTransform);
-		weaponController = new GunController(playerInput, this);
+		playerAnimator.init(playerConfig.color);
 
-		score = 0;
-		numLifes = 3;
+		playerController = new PlayerController(playerConfig.inputController, playerAnimator, cachedTransform);
+		weaponController = new GunController(playerConfig.inputController, this);
 
-		game.updateScore(0, score);
-		game.updateLives(0, numLifes);
+		invulnerableTime = GameConfig.instance.retrieveParamValue<float>(GameConfigParamIds.PlayerInvulnerableTime);
 
 		MessageBus.onGamePause += onGamePause;
 	}
@@ -63,12 +79,12 @@ public class Player : MonoBehaviour
 			{
 				other.GetComponent<PowerUp>().pickUp(this);
 			}
-			else if (other.CompareTag(TagNames.Asteroid))
+			else if (other.CompareTag(TagNames.Asteroid) && !isInvulnerable)
 			{
 				other.GetComponent<Asteroid>().kill();
 
 				CustomParticleEmitter customParticleEmitter = new CustomParticleEmitter();
-				customParticleEmitter.explode2(cachedTransform.position);
+				customParticleEmitter.explode2(color, cachedTransform.position);
 			
 				kill ();
 			}
@@ -83,20 +99,20 @@ public class Player : MonoBehaviour
 	public void addScore(int score)
 	{
 		this.score += score;
-		game.updateScore(0, this.score);
+		gameController.updateScore(this);
 	}
 
 	private void kill()
 	{
 		isActive = false;
-		gameObject.SetActive(false);
+		graphic.SetActive(false);
 
-		numLifes --;
-		game.updateLives(0, numLifes);
+		numLives --;
+		gameController.updateLives(this);
 
-		if (numLifes > 0)
+		if (numLives > 0)
 		{
-			StartCoroutine(respawn());
+			StartCoroutine(respwanCoroutine());
 		}
 		else
 		{
@@ -104,25 +120,60 @@ public class Player : MonoBehaviour
 		}
 	}
 
-	private IEnumerator respawn()
+	private IEnumerator respwanCoroutine()
 	{
 		yield return new WaitForSeconds(0.5f);
-		reset (Vector3.zero);
+		respawn();
 	}
 
-	public void reset(Vector3 position)
+	private void respawn()
 	{
-		cachedTransform.position = position;
+		cachedTransform.position = Vector3.zero;
 		cachedTransform.rotation = Quaternion.identity;
-
+		
 		playerController.reset();
-
+		
 		isActive = true;
-		gameObject.SetActive(true);
+		graphic.SetActive(true);
+		
+		isInvulnerable = true;
+		invulnerableCounter = invulnerableTime;
+		playerAnimator.setInvulnerable(true);
+	}
+
+	public void reset(int numLifes)
+	{
+		respawn();
+
+		score = 0;
+		this.numLives = numLifes;
+
+		gameController.updateScore(this);
+		gameController.updateLives(this);
 	}
 
 	private void onGamePause(bool isPause)
 	{
 		isActive = !isPause;
+	}
+
+	public int index
+	{
+		get { return playerConfig.index; }
+	}
+
+	public bool isDead
+	{
+		get { return numLives == 0; }
+	}
+
+	public Color color
+	{
+		get { return playerConfig.color; }
+	}
+
+	public PlayerInput inputController
+	{
+		get { return playerConfig.inputController; }
 	}
 }

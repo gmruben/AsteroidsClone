@@ -5,7 +5,7 @@ public class CustomParticleEmitter
 {
 	private const int numParticles = 25;
 
-	public void explode(Vector3 position, Vector2 direction)
+	public void explode(Color color, Vector3 position, Vector2 direction)
 	{
 		for (int i = 0; i < numParticles; i++)
 		{
@@ -13,11 +13,11 @@ public class CustomParticleEmitter
 			float randomAngle = Random.Range(-25.0f, 25.0f);
 			Vector2 particleDirection = Quaternion.AngleAxis(randomAngle, Vector3.back) * direction;
 
-			instantiateParticle(position, particleDirection, randomSpeed);
+			instantiateParticle(position, particleDirection, randomSpeed, color);
 		}
 	}
 
-	public void explode2(Vector3 position)
+	public void explode2(Color color, Vector3 position)
 	{
 		for (int i = 0; i < numParticles; i++)
 		{
@@ -25,15 +25,15 @@ public class CustomParticleEmitter
 			float randomAngle = Random.Range(-0.0f, 360.0f);
 			Vector2 particleDirection = Quaternion.AngleAxis(randomAngle, Vector3.back) * Vector3.up;
 
-			instantiateParticle(position, particleDirection, randomSpeed);
+			instantiateParticle(position, particleDirection, randomSpeed, color);
 		}
 	}
 
-	private void instantiateParticle(Vector3 position, Vector3 direction, float speed)
+	private void instantiateParticle(Vector3 position, Vector3 direction, float speed, Color color)
 	{
 		CustomParticle particle = EntityManager.instantiateParticle();
 
 		particle.transform.position = position;
-		particle.init(speed, direction);
+		particle.init(speed, direction, color);
 	}
 }

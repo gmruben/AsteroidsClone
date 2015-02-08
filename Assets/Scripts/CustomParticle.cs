@@ -19,13 +19,15 @@ public class CustomParticle : MonoBehaviour
 		gameObject.SetActive(false);
 	}
 
-	public void init(float speed, Vector2 direction)
+	public void init(float speed, Vector2 direction, Color color)
 	{
 		life = 2.0f;
 		gameObject.SetActive(true);
 
 		this.speed = speed;
 		this.direction = direction;
+
+		spriteRenderer.color = color;
 	}
 
 	void Update()

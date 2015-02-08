@@ -1,18 +1,19 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Game : MonoBehaviour
 {
-	public GameHUD gameHUD;
-	private Player player;
-
 	public AsteroidManager asteroidManager;
 	public PowerUpManager powerUpManager;
 
-	private GameOverMenu gameOverMenu;
+	private PauseMenu pauseMenu;
+
 	private bool isActive = true;
 
-	private int score;
+	private List<IUpdatable> updatableItemList = new List<IUpdatable>();
+
+	private GameModeController gameModeController;
 
 	void Awake()
 	{
@@ -23,19 +24,24 @@ public class Game : MonoBehaviour
 	{
 		if (isActive)
 		{
-			asteroidManager.update(Time.deltaTime);
-			powerUpManager.update(Time.deltaTime);
+			//Update all the game objects
+			for (int i = 0; i < updatableItemList.Count; i++)
+			{
+				updatableItemList[i].update(Time.deltaTime);
+			}
 		}
 	}
 
 	public void init()
 	{
-		gameHUD.init();
+		//Instantiate the game controller depending on what game mode we are playing
+		if (AsteroidsGameConfig.gameMode == GameModes.SinglePlayerMode) gameModeController = new SinglePlayerModeGameController(this, AsteroidsGameConfig.playerConfigList[0]);
+		else if (AsteroidsGameConfig.gameMode == GameModes.MultiPlayerMode) gameModeController = new MultiPlayerModeGameController(this, AsteroidsGameConfig.playerConfigList);
 
-		player = EntityManager.instantiatePlayer();
-		player.init(this);
-
-		player.onDead += onPlayerDead;
+		//Register for game flow events
+		gameModeController.onGamePause += onGamePause;
+		gameModeController.onGameRestart += onGameRestart;
+		gameModeController.onGameEnd += onGameEnd;
 
 		LevelConfig levelConfig = new LevelConfig();
 
@@ -47,7 +53,9 @@ public class Game : MonoBehaviour
 
 		powerUpManager.init();
 
-		score = 0;
+		//Add all the updatable items to the list
+		updatableItemList.Add(asteroidManager);
+		updatableItemList.Add(powerUpManager);
 
 		//Create pool instances for all the items that are going to be instantiated intensively
 		PoolManager.instance.createPool ("bullet", Resources.Load("Prefabs/Bullet") as GameObject, 50);
@@ -59,40 +67,25 @@ public class Game : MonoBehaviour
 		PoolManager.instance.createPool ("asteroid_small", Resources.Load("Prefabs/Asteroid_Small") as GameObject, 50);
 	}
 
-	public void updateScore(int playerIndex, int score)
-	{
-		gameHUD.updateScore(score);
-	}
-
-	public void updateLives(int playerIndex, int lives)
-	{
-		gameHUD.updateLives(lives);
-	}
-
 	private void onAsteroidManagerEnd()
 	{
 		Debug.Log("YAY!");
 	}
 
-	private void onPlayerDead()
+	private void restartGame()
 	{
-		isActive = false;
-		MessageBus.dispatchGamePause(true);
-
-		//We use a coroutine to delay the Game Over Menu a bit after the death
-		StartCoroutine(showGameOverMenu());
-	}
-
-	private void endGame()
-	{
-		player.reset(Vector3.zero);
 		asteroidManager.clear();
-
-		isActive = true;
-		MessageBus.dispatchGamePause(false);
+		setGamePause(false);
 	}
 
-	private IEnumerator showGameOverMenu()
+	private void returnToMainMenu()
+	{
+		//Clear the pool manager
+		PoolManager.instance.clearPoolList();
+		Application.LoadLevel("Menus");
+	}
+
+	/*private IEnumerator showGameOverMenu()
 	{
 		yield return new WaitForSeconds(0.5f);
 
@@ -101,22 +94,71 @@ public class Game : MonoBehaviour
 		
 		gameOverMenu.retryButton.onClick += onRetryButtonClick;
 		gameOverMenu.mainMenuButton.onClick += onMainMenuButtonClick;
+	}*/
+
+	private void onGamePause()
+	{
+		setGamePause(true);
+
+		pauseMenu = MenuManager.instantiatePauseMenu();
+		pauseMenu.init();
+
+		pauseMenu.resumeButton.onClick += onResumeButtonClick;
+		pauseMenu.restartButton.onClick += onRestartButtonClick;
+		pauseMenu.mainMenuButton.onClick += onPauseMainMenuButtonClick;
 	}
 
-	private void onRetryButtonClick()
+	private void onGameRestart()
 	{
-		GameObject.Destroy(gameOverMenu.gameObject);
-		gameOverMenu.retryButton.onClick += onRetryButtonClick;
-
-		endGame();
+		restartGame();
 	}
 
-	private void onMainMenuButtonClick()
+	private void onGameEnd()
 	{
-		GameObject.Destroy(gameOverMenu.gameObject);
-		gameOverMenu.retryButton.onClick += onRetryButtonClick;
+		returnToMainMenu();
+	}
 
-		//Clear the pool manager
-		PoolManager.instance.clearPoolList();
+	private void onResumeButtonClick()
+	{
+		pauseMenu.resumeButton.onClick -= onResumeButtonClick;
+		pauseMenu.restartButton.onClick -= onRestartButtonClick;
+		pauseMenu.mainMenuButton.onClick -= onPauseMainMenuButtonClick;
+
+		GameObject.Destroy(pauseMenu.gameObject);
+
+		setGamePause(false);
+	}
+
+	private void onRestartButtonClick()
+	{
+		pauseMenu.resumeButton.onClick -= onResumeButtonClick;
+		pauseMenu.restartButton.onClick -= onRestartButtonClick;
+		pauseMenu.mainMenuButton.onClick -= onPauseMainMenuButtonClick;
+
+		GameObject.Destroy(pauseMenu.gameObject);
+		
+		restartGame();
+		setGamePause(false);
+
+		gameModeController.reset();
+	}
+
+	private void onPauseMainMenuButtonClick()
+	{
+		pauseMenu.resumeButton.onClick -= onResumeButtonClick;
+		pauseMenu.restartButton.onClick -= onRestartButtonClick;
+		pauseMenu.mainMenuButton.onClick -= onPauseMainMenuButtonClick;
+
+		GameObject.Destroy(pauseMenu.gameObject);
+		
+		returnToMainMenu();
+	}
+
+	public void setGamePause(bool isPause)
+	{
+		isActive = !isPause;
+		MessageBus.dispatchGamePause(isPause);
+
+		gameModeController.setActive(!isPause);
 	}
 }

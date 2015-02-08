@@ -12,6 +12,11 @@ public class MainMenu : UIMenu
 		quitButton.onClick += onQuitButtonClick;
 	}
 
+	public override void setEnabled (bool isEnabled)
+	{
+		
+	}
+
 	private void onPlayButtonClick()
 	{
 		App.instance.showGameMenu();

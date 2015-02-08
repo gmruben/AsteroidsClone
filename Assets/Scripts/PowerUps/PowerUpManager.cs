@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PowerUpManager : MonoBehaviour
+public class PowerUpManager : MonoBehaviour, IUpdatable
 {
 	private float powerUpSpawnTime = 1;
 	private float spawnCounter;

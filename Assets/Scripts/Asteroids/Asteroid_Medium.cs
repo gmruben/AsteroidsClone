@@ -25,6 +25,6 @@ public class Asteroid_Medium : Asteroid
 		PoolManager.instance.destroyInstance(GetComponent<PoolInstance>());
 
 		CustomParticleEmitter customParticleEmitter = new CustomParticleEmitter();
-		customParticleEmitter.explode2(cachedTransform.position);
+		customParticleEmitter.explode2(Color.white, cachedTransform.position);
 	}
 }

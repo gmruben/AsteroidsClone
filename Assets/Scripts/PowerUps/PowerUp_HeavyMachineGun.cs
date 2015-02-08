@@ -16,7 +16,7 @@ public class PowerUp_HeavyMachineGun : PowerUp
 		time = 2.5f;
 
 		player.setTimer(2.5f);
-		player.changeShootController(new HeavyMachineGunController(player.playerInput, player));
+		player.changeShootController(new HeavyMachineGunController(player.inputController, player));
 
 		sprite.gameObject.SetActive(false);
 	}
@@ -32,7 +32,7 @@ public class PowerUp_HeavyMachineGun : PowerUp
 
 	public void end()
 	{
-		player.changeShootController(new GunController(player.playerInput, player));
+		player.changeShootController(new GunController(player.inputController, player));
 		GameObject.Destroy(gameObject);
 	}
 }

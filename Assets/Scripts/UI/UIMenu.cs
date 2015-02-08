@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class UIMenu : MonoBehaviour
+public abstract class UIMenu : MonoBehaviour
 {
 	void Start()
 	{
@@ -23,6 +23,6 @@ public class UIMenu : MonoBehaviour
 	{
 		gameObject.SetActive(isActive);
 	}
-
-	public virtual void setEnabled(bool isEnabled) { }
+	
+	public abstract void setEnabled(bool isEnabled);
 }
