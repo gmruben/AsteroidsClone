@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+ 
 /// <summary>
-/// This class have functions for instantiating all the entities in the game. If controls that entities
+/// This class have functions for instantiating all the entities in the game. It controls that entities
 /// that are instantiated intensively are retrieved from a pool.
 /// </summary>
 public class EntityManager
@@ -15,17 +15,17 @@ public class EntityManager
 
 	public static Bullet instantiateBullet()
 	{
-		return PoolManager.instance.retrievePoolInstance ("bullet").GetComponent<Bullet>();
+		return PoolManager.instance.retrievePoolInstance (PoolIds.Bullet).GetComponent<Bullet>();
 	}
 
 	public static Bullet instantiateHeavyBullet()
 	{
-		return PoolManager.instance.retrievePoolInstance ("heavyBullet").GetComponent<Bullet>();
+		return PoolManager.instance.retrievePoolInstance (PoolIds.HeavyBullet).GetComponent<Bullet>();
 	}
 
 	public static CustomParticle instantiateParticle()
 	{
-		return PoolManager.instance.retrievePoolInstance ("particle").GetComponent<CustomParticle>();
+		return PoolManager.instance.retrievePoolInstance (PoolIds.Particle).GetComponent<CustomParticle>();
 	}
 
 	public static Asteroid instantiateAsteroid(string id)

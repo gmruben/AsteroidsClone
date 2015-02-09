@@ -2,7 +2,9 @@
 using System.Collections;
 
 /// <summary>
-/// This class controls that a transform warps from one side of the screen to the other
+/// This class controls that a transform warps from one side of the screen to the other. It would be more flexible as a component
+/// updated independently, but if the number of entities that uses it is too big, that would add a lot of new Update() functions
+/// that could have an impact on performance
 /// </summary>
 public class Warper
 {

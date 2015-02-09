@@ -24,6 +24,20 @@ public abstract class PowerUp : MonoBehaviour
 		MessageBus.onGamePause += onGamePause;
 	}
 
+	protected virtual void Update()
+	{
+		if (isActive)
+		{
+			time -= Time.deltaTime;
+			player.updateTimer(time);
+			
+			if (time <= 0)
+			{
+				end ();
+			}
+		}
+	}
+
 	private void onGamePause(bool isPause)
 	{
 		isActive = !isPause;

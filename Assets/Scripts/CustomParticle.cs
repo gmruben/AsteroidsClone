@@ -6,6 +6,9 @@ using System.Collections;
 /// </summary>
 public class CustomParticle : MonoBehaviour
 {
+	private const float lifeTime = 2.0f;
+	private const float lifeSpeed = 2.5f;
+
 	private float life;
 
 	private float speed;
@@ -16,6 +19,7 @@ public class CustomParticle : MonoBehaviour
 
 	void Awake()
 	{
+		//When awaking cached all the components needed and set inactive
 		cachedTransform = transform;
 		spriteRenderer = GetComponentInChildren<SpriteRenderer>();
 
@@ -24,7 +28,7 @@ public class CustomParticle : MonoBehaviour
 
 	public void init(float speed, Vector2 direction, Color color)
 	{
-		life = 2.0f;
+		life = lifeTime;
 		gameObject.SetActive(true);
 
 		this.speed = speed;
@@ -35,7 +39,7 @@ public class CustomParticle : MonoBehaviour
 
 	void Update()
 	{
-		life -= Time.deltaTime * 2.5f;
+		life -= Time.deltaTime * lifeSpeed;
 
 		if (life <= 0)
 		{

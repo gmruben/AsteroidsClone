@@ -14,10 +14,17 @@ public class Bullet : MonoBehaviour
 	private float lifeTimer;
 	private bool isActive = true;
 
+	private Warper warper;
 	private CustomParticleEmitter customParticleEmitter;
 
 	void Awake()
 	{
+		cachedTransform = transform;
+		customParticleEmitter = new CustomParticleEmitter();
+
+		//Create Warper
+		warper = new Warper (cachedTransform);
+
 		//Susbribe to game pause and game end events
 		MessageBus.onGamePause += onGamePause;
 		MessageBus.onGameEnd += onGameEnd;
@@ -25,9 +32,6 @@ public class Bullet : MonoBehaviour
 
 	public void init(Player player, Vector3 direction)
 	{
-		cachedTransform = transform;
-		customParticleEmitter = new CustomParticleEmitter();
-
 		this.player = player;
 		this.direction = direction;
 
@@ -39,11 +43,7 @@ public class Bullet : MonoBehaviour
 		if (isActive)
 		{
 			cachedTransform.position += direction * speed * Time.deltaTime;
-
-			Vector3 point = GameCamera.instance.camera.WorldToViewportPoint(cachedTransform.position);
-			
-			if (point.x < 0.0f || point.x > 1.0f) cachedTransform.position = new Vector3(-cachedTransform.position.x, cachedTransform.position.y, cachedTransform.position.z);
-			if (point.y < 0.0f || point.y > 1.0f) cachedTransform.position = new Vector3(cachedTransform.position.x, -cachedTransform.position.y, cachedTransform.position.z);
+			warper.checkWarp();
 
 			lifeTimer -= Time.deltaTime;
 			if (lifeTimer < 0) PoolManager.instance.destroyInstance(GetComponent<PoolInstance>());

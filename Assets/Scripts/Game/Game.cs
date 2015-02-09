@@ -70,13 +70,13 @@ public class Game : MonoBehaviour
 		updatableItemList.Add(powerUpManager);
 
 		//Create pool instances for all the items that are going to be instantiated intensively
-		PoolManager.instance.createPool ("bullet", Resources.Load("Prefabs/Bullet") as GameObject, 50);
-		PoolManager.instance.createPool ("heavyBullet", Resources.Load("Prefabs/HeavyBullet") as GameObject, 50);
-		PoolManager.instance.createPool ("particle", Resources.Load("Prefabs/Particle") as GameObject, 500);
+		PoolManager.instance.createPool (PoolIds.Bullet, Resources.Load("Prefabs/Bullet") as GameObject, 50);
+		PoolManager.instance.createPool (PoolIds.HeavyBullet, Resources.Load("Prefabs/HeavyBullet") as GameObject, 50);
+		PoolManager.instance.createPool (PoolIds.Particle, Resources.Load("Prefabs/Particle") as GameObject, 500);
 
-		PoolManager.instance.createPool ("asteroid", Resources.Load("Prefabs/Asteroid") as GameObject, 50);
-		PoolManager.instance.createPool ("asteroid_medium", Resources.Load("Prefabs/Asteroid_Medium") as GameObject, 50);
-		PoolManager.instance.createPool ("asteroid_small", Resources.Load("Prefabs/Asteroid_Small") as GameObject, 50);
+		PoolManager.instance.createPool (PoolIds.AsteroidBig, Resources.Load("Prefabs/Asteroid_Big") as GameObject, 50);
+		PoolManager.instance.createPool (PoolIds.AsteroidMedium, Resources.Load("Prefabs/Asteroid_Medium") as GameObject, 50);
+		PoolManager.instance.createPool (PoolIds.AsteroidSmall, Resources.Load("Prefabs/Asteroid_Small") as GameObject, 50);
 	}
 
 	private void restartGame()
@@ -91,6 +91,9 @@ public class Game : MonoBehaviour
 	{
 		//Clear the pool manager
 		PoolManager.instance.clearPoolList();
+		//Clean the message bus
+		MessageBus.clean ();
+
 		Application.LoadLevel("Menus");
 	}
 

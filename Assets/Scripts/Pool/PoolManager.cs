@@ -111,3 +111,14 @@ public class PoolManager : MonoBehaviour
 		public PoolInstance[] instanceList;
 	}
 }
+
+public class PoolIds
+{
+	public static string Bullet = "Bullet";
+	public static string HeavyBullet = "HeavyBullet";
+	public static string Particle = "Particle";
+
+	public static string AsteroidBig = "AsteroidBig";
+	public static string AsteroidMedium = "AsteroidMedium";
+	public static string AsteroidSmall = "AsteroidSmall";
+}

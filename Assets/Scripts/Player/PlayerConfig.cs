@@ -1,6 +1,9 @@
 using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// Stores the configuration for a player
+/// </summary>
 public class PlayerConfig
 {
 	public int index;

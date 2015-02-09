@@ -3,16 +3,9 @@ using System.Collections;
 
 public class PowerUp_HeavyMachineGun : PowerUp
 {
-	void Update()
+	protected override void Update()
 	{
-		if (isActive)
-		{
-			time -= Time.deltaTime;
-			if (time <= 0)
-			{
-				end ();
-			}
-		}
+		base.Update ();
 	}
 
 	public override void pickUp(Player player)

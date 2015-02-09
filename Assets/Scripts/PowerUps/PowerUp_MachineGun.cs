@@ -3,6 +3,11 @@ using System.Collections;
 
 public class PowerUp_MachineGun : PowerUp
 {
+	protected override void Update()
+	{
+		base.Update ();
+	}
+
 	public override void pickUp(Player player)
 	{
 		this.player = player;
@@ -15,19 +20,6 @@ public class PowerUp_MachineGun : PowerUp
 
 		sprite.gameObject.SetActive(false);
 		dispatchOnPickUp();
-	}
-
-	void Update()
-	{
-		if (isActive)
-		{
-			time -= Time.deltaTime;
-			player.updateTimer(time);
-			if (time <= 0)
-			{
-				end ();
-			}
-		}
 	}
 
 	public override void end()

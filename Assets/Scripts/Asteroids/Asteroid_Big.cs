@@ -18,17 +18,17 @@ public class Asteroid_Big : Asteroid
 		Vector3 direction3 = Quaternion.AngleAxis(-45, Vector3.back) * direction;
 		Vector3 direction4 = Quaternion.AngleAxis(-90, Vector3.back) * direction;
 
-		asteroidManager.instantiateAsteroid("asteroid_medium", position, direction1);
-		asteroidManager.instantiateAsteroid("asteroid_medium", position, direction2);
-		asteroidManager.instantiateAsteroid("asteroid_medium", position, direction3);
-		asteroidManager.instantiateAsteroid("asteroid_medium", position, direction4);
+		asteroidManager.instantiateAsteroid(PoolIds.AsteroidMedium, position, direction1);
+		asteroidManager.instantiateAsteroid(PoolIds.AsteroidMedium, position, direction2);
+		asteroidManager.instantiateAsteroid(PoolIds.AsteroidMedium, position, direction3);
+		asteroidManager.instantiateAsteroid(PoolIds.AsteroidMedium, position, direction4);
 
 		PoolManager.instance.destroyInstance(GetComponent<PoolInstance>());
 	}
 
-	public override void kill()
+	/*public override void kill()
 	{
 		PoolManager.instance.destroyInstance(GetComponent<PoolInstance>());
 		customParticleEmitter.explosion(Color.white, cachedTransform.position);
-	}
+	}*/
 }

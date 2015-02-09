@@ -1,6 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// Class for instantiating all the different menus in the game. We could have a class with all the references to the prefabs,
+/// but that would mean loading all the prefabs when loading the scene, which would increase the loading time (and it is very
+/// likely that we don't need them all at onche. The bad thing about using Resoucer.Load is that we are hardcoding the path.
+/// </summary>
 public class MenuManager
 {
 	public static MainMenu instantiateMainMenu()

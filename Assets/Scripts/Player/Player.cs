@@ -6,18 +6,17 @@ public class Player : MonoBehaviour
 {
 	public event Action onDead;
 
+	[HideInInspector]
+	public Transform cachedTransform;
+
 	public GameObject graphic;
 	public TextMesh timer;
+	public PlayerAnimator playerAnimator;
 
 	private PlayerController playerController;
 	private IWeaponController weaponController;
 
-	CustomParticleEmitter customParticleEmitter;
-	
-	[HideInInspector]
-	public Transform cachedTransform;
-
-	public PlayerAnimator playerAnimator;
+	private CustomParticleEmitter customParticleEmitter;
 
 	private GameModeController gameController;
 
@@ -89,10 +88,10 @@ public class Player : MonoBehaviour
 			}
 			else if (other.CompareTag(TagNames.Asteroid) && !isInvulnerable)
 			{
-				other.GetComponent<Asteroid>().kill();
+				other.GetComponent<Asteroid>().hit(cachedTransform.position, playerController.direction);
 
 				customParticleEmitter.explosion(color, cachedTransform.position);
-				kill ();
+				hit ();
 			}
 		}
 	}
@@ -115,11 +114,12 @@ public class Player : MonoBehaviour
 
 	public void addScore(int score)
 	{
+		//The score is stored locally by each player, and then updates the game state
 		this.score += score;
 		gameController.updateScore(this);
 	}
 
-	private void kill()
+	private void hit()
 	{
 		isActive = false;
 		graphic.SetActive(false);
@@ -127,6 +127,7 @@ public class Player : MonoBehaviour
 		numLives --;
 		gameController.updateLives(this);
 
+		//If we had a power up active, end its effect
 		if (currentPowerUp != null)
 		{
 			currentPowerUp.end();
@@ -134,20 +135,25 @@ public class Player : MonoBehaviour
 
 		if (numLives > 0)
 		{
-			StartCoroutine(respwanCoroutine());
+			//Use a coroutine so the respawn doesn't happen immediately after dying
+			StartCoroutine(respawnCoroutine());
 		}
 		else
 		{
+			//If the player has run out of lives, send the event that it is dead 
 			if (onDead != null) onDead();
 		}
 	}
 
-	private IEnumerator respwanCoroutine()
+	private IEnumerator respawnCoroutine()
 	{
 		yield return new WaitForSeconds(0.5f);
 		respawn();
 	}
 
+	/// <summary>
+	/// Respawns the player after dying
+	/// </summary>
 	private void respawn()
 	{
 		cachedTransform.position = Vector3.zero;
@@ -163,6 +169,10 @@ public class Player : MonoBehaviour
 		playerAnimator.setInvulnerable(true);
 	}
 
+	/// <summary>
+	/// Resets a player to its initial value
+	/// </summary>
+	/// <param name="numLives">The number of lives the player starts with.</param>
 	public void reset(int numLives)
 	{
 		respawn();

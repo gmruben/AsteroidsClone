@@ -14,7 +14,7 @@ public abstract class Asteroid : MonoBehaviour
 
 	protected AsteroidManager asteroidManager;
 
-	private Warper warpController;
+	private Warper warper;
 	protected CustomParticleEmitter customParticleEmitter;
 
 	private bool isActive = true;
@@ -30,7 +30,7 @@ public abstract class Asteroid : MonoBehaviour
 		if (isActive)
 		{
 			cachedTransform.position += direction * speed * Time.deltaTime;
-			warpController.checkWarp();
+			warper.checkWarp();
 		}
 	}
 	
@@ -42,7 +42,7 @@ public abstract class Asteroid : MonoBehaviour
 		cachedTransform.position = position;
 
 		customParticleEmitter = new CustomParticleEmitter();
-		warpController = new Warper(cachedTransform);
+		warper = new Warper(cachedTransform);
 
 		initParams();
 	}
@@ -50,7 +50,7 @@ public abstract class Asteroid : MonoBehaviour
 	//Initialises the parameters for the asteroid
 	public abstract void initParams();
 	public abstract void hit(Vector3 position, Vector3 direction);
-	public abstract void kill();
+	//public abstract void kill();
 
 	private void onGamePause(bool isPause)
 	{

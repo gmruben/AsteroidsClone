@@ -21,4 +21,13 @@ public class MessageBus
 	{
 		if (onGameEnd != null) onGameEnd();
 	}
+
+	/// <summary>
+	/// Cleans all the listeners subscribed to the events
+	/// </summary>
+	public static void clean()
+	{
+		onGamePause = null;
+		onGameEnd = null;
+	}
 }
