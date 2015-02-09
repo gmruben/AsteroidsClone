@@ -46,13 +46,7 @@ public class PoolManager : MonoBehaviour
 
 		for (int i = 0; i < numInstances; i++)
 		{
-			//The pool only operates with PoolInstance objects
-			PoolInstance instance = (GameObject.Instantiate(prefab) as GameObject).GetComponent<PoolInstance>();
-			
-			instance.init();
-			instance.transform.parent = transform;
-			
-			poolData.instanceList[i] = instance;
+			poolData.instanceList[i] = instantiatePoolInstance(prefab);
 		}
 
 		poolList.Add (poolId, poolData);
@@ -94,13 +88,61 @@ public class PoolManager : MonoBehaviour
 			}
 		}
 
-		Debug.LogWarning("There are no instances availables in " + poolId);
-		return null;
+		//If there are no more instances available, resize the pool and log a warning (so we know we need to make the pool bigger)
+		resizePoolInstanceList (poolId);
+		Debug.LogWarning("There are no instances availables in " + poolId + " (Resizing pool)");
+
+		return retrievePoolInstance (poolId);
 	}
 
 	public void destroyInstance(PoolInstance instance)
 	{
 		instance.kill();
+	}
+
+	/// <summary>
+	/// Resizes the instance list for a given pool (in case we need more instances that we expected)
+	/// </summary>
+	/// <param name="poolId">The id of the pool we want to resize.</param>
+	private void resizePoolInstanceList(string poolId)
+	{
+		//Get the pool data and the prefab to instantiate
+		PoolData poolData = poolList[poolId];
+		GameObject prefab = poolData.instanceList[0].gameObject;
+
+		//Calculate the new size and create the new array
+		int newSize = Mathf.FloorToInt (poolData.numInstances * 1.20f);
+		PoolInstance[] newInstanceList = new PoolInstance[newSize];
+
+		//Move the references
+		for (int i = 0; i < poolData.numInstances; i++)
+		{
+			newInstanceList[i] = poolData.instanceList[i];
+		}
+		//Create the new instances
+		for (int i = poolData.numInstances; i < newSize; i++)
+		{
+			newInstanceList[i] = instantiatePoolInstance(prefab);
+		}
+
+		poolData.numInstances = newSize;
+		poolData.instanceList = newInstanceList;
+	}
+
+	/// <summary>
+	/// Instantiates a new pool instance
+	/// </summary>
+	/// <returns>The pool instance.</returns>
+	/// <param name="prefab">The prefab for the instance.</param>
+	private PoolInstance instantiatePoolInstance(GameObject prefab)
+	{
+		//The pool only operates with PoolInstance objects
+		PoolInstance instance = (GameObject.Instantiate(prefab) as GameObject).GetComponent<PoolInstance>();
+		
+		instance.init();
+		instance.transform.parent = transform;
+		
+		return instance;
 	}
 
 	private class PoolData
