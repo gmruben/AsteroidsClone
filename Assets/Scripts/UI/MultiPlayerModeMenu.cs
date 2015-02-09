@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -26,10 +26,10 @@ public class MultiPlayerModeMenu : UIMenu
 
 		playerBoxList = new MultiPlayerBox[numPlayers];
 
-		playerConfigList[PlayerIndex.P1] = new PlayerConfig(PlayerIndex.P1, PlayerColor.P1, new PlayerInput(KeyCode.LeftArrow, KeyCode.RightArrow, KeyCode.UpArrow, KeyCode.DownArrow));
-		playerConfigList[PlayerIndex.P2] = new PlayerConfig(PlayerIndex.P2, PlayerColor.P2, new PlayerInput(KeyCode.A, KeyCode.D, KeyCode.W, KeyCode.S));
-		playerConfigList[PlayerIndex.P3] = new PlayerConfig(PlayerIndex.P3, PlayerColor.P3, new PlayerInput(KeyCode.F, KeyCode.H, KeyCode.T, KeyCode.G));
-		playerConfigList[PlayerIndex.P4] = new PlayerConfig(PlayerIndex.P4, PlayerColor.P4, new PlayerInput(KeyCode.J, KeyCode.L, KeyCode.I, KeyCode.K));
+		playerConfigList[PlayerIndex.P1] = new PlayerConfig(PlayerIndex.P1, PlayerColor.P1, new InputController(KeyCode.LeftArrow, KeyCode.RightArrow, KeyCode.UpArrow, KeyCode.DownArrow));
+		playerConfigList[PlayerIndex.P2] = new PlayerConfig(PlayerIndex.P2, PlayerColor.P2, new InputController(KeyCode.A, KeyCode.D, KeyCode.W, KeyCode.S));
+		playerConfigList[PlayerIndex.P3] = new PlayerConfig(PlayerIndex.P3, PlayerColor.P3, new InputController(KeyCode.F, KeyCode.H, KeyCode.T, KeyCode.G));
+		playerConfigList[PlayerIndex.P4] = new PlayerConfig(PlayerIndex.P4, PlayerColor.P4, new InputController(KeyCode.J, KeyCode.L, KeyCode.I, KeyCode.K));
 
 		p1Box.init(playerConfigList[PlayerIndex.P1]);
 		p2Box.init(playerConfigList[PlayerIndex.P2]);
@@ -63,12 +63,13 @@ public class MultiPlayerModeMenu : UIMenu
 		if (isReady) numReady++;
 		else numReady--;
 
-		playButton.setActive(numReady > 0);
+		//We need at least 2 player to play multiplayer
+		playButton.setActive(numReady > 1);
 	}
-
-
+	
 	private void startGame()
 	{
+		AsteroidsGameConfig.playerConfigList.Clear();
 		for (int i = 0; i < playerBoxList.Length; i++)
 		{
 			if (playerBoxList[i].isReady)

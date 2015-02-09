@@ -26,6 +26,9 @@ public class App : MonoBehaviour
 
 	public void init()
 	{
+		//Load the save data
+		GameSaveManager.loadData();
+
 		MainMenu mainMenu = MenuManager.instantiateMainMenu ();
 		mainMenu.init ();
 		
@@ -42,6 +45,17 @@ public class App : MonoBehaviour
 		gameMenu.init();
 		
 		menus.Push(gameMenu);
+	}
+
+	public void showSinglePlayerModeMenu()
+	{
+		UIMenu currentMenu = menus.Peek();
+		currentMenu.setActive(false);
+		
+		SinglePlayerModeMenu singlePlayerModeMenu = MenuManager.instantiateSinglePlayerModeMenu();
+		singlePlayerModeMenu.init();
+		
+		menus.Push(singlePlayerModeMenu);
 	}
 
 	public void showMultiPlayerModeMenu()

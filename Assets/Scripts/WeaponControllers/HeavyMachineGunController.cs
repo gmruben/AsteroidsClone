@@ -1,15 +1,15 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class HeavyMachineGunController : IWeaponController
 {
-	private PlayerInput playerInput;
+	private InputController playerInput;
 	private Player player;
 
 	private bool isOn = false;
 	private float coolDown = 0;
 	
-	public HeavyMachineGunController(PlayerInput playerInput, Player player)
+	public HeavyMachineGunController(InputController playerInput, Player player)
 	{
 		this.playerInput = playerInput;
 		this.player = player;

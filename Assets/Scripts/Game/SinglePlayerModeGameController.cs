@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class SinglePlayerModeGameController : GameModeController
@@ -16,11 +16,11 @@ public class SinglePlayerModeGameController : GameModeController
 		gameHUD = MenuManager.instantiateSinglePlayerGameHUD();
 		gameHUD.pauseButton.onClick += onPauseButtonClick;
 
-		int playerNumLifes = GameConfig.instance.retrieveParamValue<int>(GameConfigParamIds.PlayerNumLifes);
+		int playerNumLives = GameParamConfig.instance.retrieveParamValue<int>(GameConfigParamIds.PlayerNumLives);
 		player = EntityManager.instantiatePlayer();
 
 		player.init(this, playerConfig);
-		player.reset(playerNumLifes);
+		player.reset(playerNumLives);
 
 		player.onDead += onPlayerDead;
 	}
@@ -37,22 +37,31 @@ public class SinglePlayerModeGameController : GameModeController
 	
 	public override void updateLives(Player player)
 	{
-		gameHUD.updateLifes(player.numLives);
+		gameHUD.updateLives(player.numLives);
 	}
 
 	public override void reset()
 	{
-		int playerNumLifes = GameConfig.instance.retrieveParamValue<int>(GameConfigParamIds.PlayerNumLifes);
-		player.reset(playerNumLifes);
+		int playerNumLives = GameParamConfig.instance.retrieveParamValue<int>(GameConfigParamIds.PlayerNumLives);
+		player.reset(playerNumLives);
 	}
 
 	private void onPlayerDead()
 	{
 		//Pause the game
 		game.setGamePause(true);
-		
+
+		//Check if we have a new highscore
+		if (player.score > GameSaveManager.gameSave.highscore)
+		{
+			GameSaveManager.gameSave.highscore = player.score;
+			GameSaveManager.saveData();
+		}
+
 		//We use a coroutine to delay the Game Over Menu a bit after the death
 		game.StartCoroutine(showGameOverMenu());
+
+		MessageBus.dispatchGameEnd();
 	}
 
 	private void onPauseButtonClick()

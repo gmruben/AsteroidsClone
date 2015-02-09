@@ -2,11 +2,16 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class PlayerInput
+/// <summary>
+/// This class abstracts all the input from the user and gives access to the specific actions that a
+/// player can do (left, right, up and action). When creating an instance we only need to specify
+/// the keys to map to the different actions
+/// </summary>
+public class InputController
 {
 	private Dictionary<string, KeyCode> inputMap;
 
-	public PlayerInput(KeyCode left, KeyCode right, KeyCode up, KeyCode action)
+	public InputController(KeyCode left, KeyCode right, KeyCode up, KeyCode action)
 	{
 		inputMap = new Dictionary<string, KeyCode>();
 

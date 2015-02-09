@@ -2,6 +2,9 @@
 using System;
 using System.Collections;
 
+/// <summary>
+/// An abstract class for the different classes for each game mode
+/// </summary>
 public abstract class GameModeController
 {
 	public event Action onGamePause;

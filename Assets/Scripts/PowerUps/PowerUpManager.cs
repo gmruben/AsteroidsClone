@@ -1,9 +1,9 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
-public class PowerUpManager : MonoBehaviour, IUpdatable
+public class PowerUpManager : MonoBehaviour, IUpdateable
 {
-	private float powerUpSpawnTime = 1;
+	private float powerUpSpawnTime;
 	private float spawnCounter;
 
 	public Transform[] spawnPointList;
@@ -13,11 +13,10 @@ public class PowerUpManager : MonoBehaviour, IUpdatable
 
 	public void init()
 	{
-		/*this.gameCamera = gameCamera;
-		this.levelConfig = levelConfig;*/
-
 		spawnCounter = 0;
 		canSpawn = true;
+
+		powerUpSpawnTime = GameParamConfig.instance.retrieveParamValue<float>(GameConfigParamIds.PowerUpSpawnTime);
 	}
 
 	public void update(float time)
@@ -33,7 +32,7 @@ public class PowerUpManager : MonoBehaviour, IUpdatable
 				int randomIndex = UnityEngine.Random.Range(0, spawnPointList.Length);
 				Vector3 position = spawnPointList[randomIndex].position;
 
-				powerUp = EntityManager.instantiatePowerUp("hola");
+				powerUp = EntityManager.instantiatePowerUp(PowerUpIds.retrieveRandomPowerUpId());
 				powerUp.transform.position = position;
 
 				powerUp.onPickUp += onPowerUpPickUp;
@@ -41,9 +40,19 @@ public class PowerUpManager : MonoBehaviour, IUpdatable
 		}
 	}
 
+	public void clear()
+	{
+		spawnCounter = 0;
+		canSpawn = true;
+		
+		if (powerUp != null) GameObject.Destroy(powerUp.gameObject);
+	}
+
 	private void onPowerUpPickUp()
 	{
 		powerUp.onPickUp -= onPowerUpPickUp;
 		canSpawn = true;
+
+		//if (powerUp != null) GameObject.Destroy(powerUp.gameObject);
 	}
 }

@@ -1,24 +1,20 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class AsteroidManager : MonoBehaviour, IUpdatable
+public class AsteroidManager : MonoBehaviour, IUpdateable
 {
-	public event Action onEnd;
-
 	public Transform[] spawnPointList;
 
 	private float spawnCounter;
 	private float asteroidCounter;
 	private List<Asteroid> asteroidList;
-	
-	private LevelConfig levelConfig;
 
-	public void init(LevelConfig levelConfig)
+	private float spawnTime = 5.0f;
+
+	public void init()
 	{
-		this.levelConfig = levelConfig;
-
 		spawnCounter = 0;
 		asteroidCounter = 0;
 
@@ -28,7 +24,7 @@ public class AsteroidManager : MonoBehaviour, IUpdatable
 	public void update(float time)
 	{
 		spawnCounter += time;
-		if (spawnCounter > levelConfig.spawnTime)
+		if (spawnCounter > spawnTime)
 		{
 			spawnCounter = 0;
 			asteroidCounter++;
@@ -59,10 +55,4 @@ public class AsteroidManager : MonoBehaviour, IUpdatable
 		asteroid.init(this, position, direction);
 		asteroidList.Add(asteroid);
 	}
-}
-
-public class LevelConfig
-{
-	public float spawnTime;
-	public int numAsteroids;
 }

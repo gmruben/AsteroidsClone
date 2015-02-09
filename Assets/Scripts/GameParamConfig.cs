@@ -1,22 +1,25 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class GameConfig
+/// <summary>
+/// This classs stores all the different parameters used in the game.
+/// </summary>
+public class GameParamConfig
 {
 	private static Dictionary<string, string> parameterList = new Dictionary<string, string>();
 
-	private static GameConfig _instance;
+	private static GameParamConfig _instance;
 
-	private GameConfig() {}
+	private GameParamConfig() {}
 
-	public static GameConfig instance
+	public static GameParamConfig instance
 	{
 		get
 		{
 			if (_instance == null)
 			{
-				_instance = new GameConfig();
+				_instance = new GameParamConfig();
 				_instance.init();
 			}
 			return _instance;
@@ -25,15 +28,22 @@ public class GameConfig
 
 	public void init()
 	{
+		//Here we initialise the values for all the different parameters in the game
+
 		//PLAYER
 		parameterList.Add (GameConfigParamIds.PlayerAcceleration, "15.0");
 		parameterList.Add (GameConfigParamIds.PlayerMaxSpeed, "25.0");
 		parameterList.Add (GameConfigParamIds.PlayerAngularSpeed, "150.0");
 		parameterList.Add (GameConfigParamIds.PlayerInvulnerableTime, "2.5");
-		parameterList.Add (GameConfigParamIds.PlayerNumLifes, "3");
+		parameterList.Add (GameConfigParamIds.PlayerNumLives, "3");
 
 		//WEAPONS
 		parameterList.Add (GameConfigParamIds.GunCoolDownTime, "0.5");
+
+		//POWER UPS
+		parameterList.Add (GameConfigParamIds.PowerUpSpawnTime, "5");
+		parameterList.Add (GameConfigParamIds.MachineGunPowerUpTime, "10.0");
+		parameterList.Add (GameConfigParamIds.HeavyMachineGunPowerUpTime, "5.0");
 
 		//ASTEROIDS
 		parameterList.Add (GameConfigParamIds.AsteroidSmallScore, "50");
@@ -65,6 +75,12 @@ public class GameConfig
 		return (T)value;
 	}
 
+	/// <summary>
+	/// Casts a value to an specific type
+	/// </summary>
+	/// <returns>The value casted to the correct type.</returns>
+	/// <param name="value">Value.</param>
+	/// <typeparam name="T">The type of the value.</typeparam>
 	private T retrieveValueByType<T>(string value)
 	{
 		object newValue = null;
@@ -88,6 +104,9 @@ public class GameConfig
 	}
 }
 
+/// <summary>
+/// This class contains all the Ids for all the game config parameters.
+/// </summary>
 public class GameConfigParamIds
 {
 	//PLAYER
@@ -95,10 +114,15 @@ public class GameConfigParamIds
 	public static string PlayerAngularSpeed = "PlayerAngularSpeed";
 	public static string PlayerMaxSpeed = "PlayerMaxSpeed";
 	public static string PlayerInvulnerableTime = "PlayerInvulnerableTime";
-	public static string PlayerNumLifes = "PlayerNumLifes";
+	public static string PlayerNumLives = "PlayerNumLives";
 
 	//WEAPONS
 	public static string GunCoolDownTime = "GunCoolDownTime";
+
+	//POWER UPS
+	public static string PowerUpSpawnTime = "PowerUpSpawnTime";
+	public static string MachineGunPowerUpTime = "MachineGunPowerUpTime";
+	public static string HeavyMachineGunPowerUpTime = "HeavyMachineGunPowerUpTime";
 
 	//ASTEROIDS
 	public static string AsteroidSmallScore = "AsteroidSmallScore";

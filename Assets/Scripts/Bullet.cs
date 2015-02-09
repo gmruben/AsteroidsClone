@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class Bullet : MonoBehaviour
@@ -14,16 +14,24 @@ public class Bullet : MonoBehaviour
 	private float lifeTimer;
 	private bool isActive = true;
 
+	private CustomParticleEmitter customParticleEmitter;
+
+	void Awake()
+	{
+		//Susbribe to game pause and game end events
+		MessageBus.onGamePause += onGamePause;
+		MessageBus.onGameEnd += onGameEnd;
+	}
+
 	public void init(Player player, Vector3 direction)
 	{
 		cachedTransform = transform;
+		customParticleEmitter = new CustomParticleEmitter();
 
 		this.player = player;
 		this.direction = direction;
 
 		lifeTimer = life;
-
-		MessageBus.onGamePause += onGamePause;
 	}
 
 	void Update()
@@ -49,8 +57,7 @@ public class Bullet : MonoBehaviour
 			Asteroid asteroid = other.GetComponent<Asteroid>();
 			asteroid.hit(cachedTransform.position, direction);
 
-			CustomParticleEmitter customParticleEmitter = new CustomParticleEmitter();
-			customParticleEmitter.explode(Color.white, cachedTransform.position, -direction);
+			customParticleEmitter.hit(Color.white, cachedTransform.position, -direction);
 
 			player.addScore(asteroid.score);
 			PoolManager.instance.destroyInstance(GetComponent<PoolInstance>());
@@ -59,8 +66,20 @@ public class Bullet : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Called when the game is paused/unpaused
+	/// </summary>
+	/// <param name="isPause">If <c>true</c> is pause.</param>
 	private void onGamePause(bool isPause)
 	{
 		isActive = !isPause;
+	}
+
+	/// <summary>
+	/// Called when the game is ended
+	/// </summary>
+	private void onGameEnd()
+	{
+		PoolManager.instance.destroyInstance(GetComponent<PoolInstance>());
 	}
 }

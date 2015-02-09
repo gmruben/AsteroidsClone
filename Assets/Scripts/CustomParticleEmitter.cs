@@ -1,11 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// A very simple particle emitter that only controls speed and angle of emission
+/// </summary>
 public class CustomParticleEmitter
 {
 	private const int numParticles = 25;
 
-	public void explode(Color color, Vector3 position, Vector2 direction)
+	public void hit(Color color, Vector3 position, Vector2 direction)
 	{
 		for (int i = 0; i < numParticles; i++)
 		{
@@ -17,7 +20,7 @@ public class CustomParticleEmitter
 		}
 	}
 
-	public void explode2(Color color, Vector3 position)
+	public void explosion(Color color, Vector3 position)
 	{
 		for (int i = 0; i < numParticles; i++)
 		{

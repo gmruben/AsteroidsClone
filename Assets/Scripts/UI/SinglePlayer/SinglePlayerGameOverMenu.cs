@@ -12,7 +12,7 @@ public class SinglePlayerGameOverMenu : UIMenu
 
 	public void init(Player player)
 	{
-		//highscore;
+		highscore.text = "HIGH SCORE: " + GameSaveManager.gameSave.highscore;
 		p1score.text = "PLAYER SCORE: " + player.score;
 	}
 

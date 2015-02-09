@@ -7,6 +7,7 @@ public class PlayerAnimator : MonoBehaviour
 
 	public SpriteRenderer ship;
 	public SpriteRenderer rocket;
+	public TextMesh timer;
 
 	public void init(Color shipColor)
 	{
@@ -14,6 +15,7 @@ public class PlayerAnimator : MonoBehaviour
 
 		ship.color = shipColor;
 		rocket.color = shipColor;
+		timer.color = shipColor;
 	}
 
 	public void thrust(bool inThrust)

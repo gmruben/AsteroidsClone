@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class PlayerController
@@ -8,22 +8,22 @@ public class PlayerController
 
 	private float angularSpeed;
 	
-	private PlayerInput inputController;
+	private InputController inputController;
 	private PlayerAnimator playerAnimator;
 	private Transform playerTransform;
 
 	private Vector2 speed;
 
-	public PlayerController(PlayerInput playerInput, PlayerAnimator playerAnimator, Transform playerTransform)
+	public PlayerController(InputController playerInput, PlayerAnimator playerAnimator, Transform playerTransform)
 	{
 		this.inputController = playerInput;
 		this.playerAnimator = playerAnimator;
 		this.playerTransform = playerTransform;
 
 		//Get the parameters from game config
-		acceleration = GameConfig.instance.retrieveParamValue<float>(GameConfigParamIds.PlayerAcceleration);
-		maxSpeed = GameConfig.instance.retrieveParamValue<float>(GameConfigParamIds.PlayerMaxSpeed);
-		angularSpeed = GameConfig.instance.retrieveParamValue<float>(GameConfigParamIds.PlayerAngularSpeed);
+		acceleration = GameParamConfig.instance.retrieveParamValue<float>(GameConfigParamIds.PlayerAcceleration);
+		maxSpeed = GameParamConfig.instance.retrieveParamValue<float>(GameConfigParamIds.PlayerMaxSpeed);
+		angularSpeed = GameParamConfig.instance.retrieveParamValue<float>(GameConfigParamIds.PlayerAngularSpeed);
 
 		speed = Vector2.zero;
 	}

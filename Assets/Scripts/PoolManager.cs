@@ -1,6 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+
+/// <summary>
+/// The Pool Manager has a list of different pools for instantiating lots of different objects
+/// without generating pikes
+/// </summary>
 public class PoolManager : MonoBehaviour
 {
 	private static PoolManager _instance;
@@ -20,6 +25,9 @@ public class PoolManager : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Clears all the pools in the manager
+	/// </summary>
 	public void clearPoolList()
 	{
 		foreach(KeyValuePair<string, PoolData> pair in poolList)
@@ -50,6 +58,10 @@ public class PoolManager : MonoBehaviour
 		poolList.Add (poolId, poolData);
 	}
 
+	/// <summary>
+	/// Removes all the instances in a pool
+	/// </summary>
+	/// <param name="poolId">Pool id.</param>
 	private void removePool(string poolId)
 	{
 		PoolData poolData = poolList[poolId];
@@ -59,6 +71,11 @@ public class PoolManager : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Retrieve an instance that it is not being used from an specific pool
+	/// </summary>
+	/// <returns>The pool instance.</returns>
+	/// <param name="poolId">Pool id.</param>
 	public PoolInstance retrievePoolInstance(string poolId)
 	{
 		PoolData poolData = poolList[poolId];

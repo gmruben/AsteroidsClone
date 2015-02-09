@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class Asteroid_Big : Asteroid
@@ -6,8 +6,8 @@ public class Asteroid_Big : Asteroid
 	public override void initParams()
 	{
 		//Get the config parameters for the big asteroids
-		score = GameConfig.instance.retrieveParamValue<int>(GameConfigParamIds.AsteroidBigScore);
-		speed = GameConfig.instance.retrieveParamValue<float>(GameConfigParamIds.AsteroidBigSpeed);
+		score = GameParamConfig.instance.retrieveParamValue<int>(GameConfigParamIds.AsteroidBigScore);
+		speed = GameParamConfig.instance.retrieveParamValue<float>(GameConfigParamIds.AsteroidBigSpeed);
 	}
 
 	public override void hit(Vector3 position, Vector3 direction)
@@ -29,8 +29,6 @@ public class Asteroid_Big : Asteroid
 	public override void kill()
 	{
 		PoolManager.instance.destroyInstance(GetComponent<PoolInstance>());
-
-		CustomParticleEmitter customParticleEmitter = new CustomParticleEmitter();
-		customParticleEmitter.explode2(Color.white, cachedTransform.position);
+		customParticleEmitter.explosion(Color.white, cachedTransform.position);
 	}
 }

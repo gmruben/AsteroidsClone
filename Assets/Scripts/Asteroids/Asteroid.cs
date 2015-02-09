@@ -1,6 +1,9 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// Abstract class for all the different asteroids
+/// </summary>
 public abstract class Asteroid : MonoBehaviour
 {
 	public int score { get; protected set; }
@@ -11,7 +14,8 @@ public abstract class Asteroid : MonoBehaviour
 
 	protected AsteroidManager asteroidManager;
 
-	private WarpController warpController;
+	private Warper warpController;
+	protected CustomParticleEmitter customParticleEmitter;
 
 	private bool isActive = true;
 
@@ -29,18 +33,21 @@ public abstract class Asteroid : MonoBehaviour
 			warpController.checkWarp();
 		}
 	}
-
+	
 	public void init(AsteroidManager asteroidManager, Vector3 position, Vector3 direction)
 	{
 		this.asteroidManager = asteroidManager;
 		this.direction = direction;
 
 		cachedTransform.position = position;
-		warpController = new WarpController(cachedTransform);
+
+		customParticleEmitter = new CustomParticleEmitter();
+		warpController = new Warper(cachedTransform);
 
 		initParams();
 	}
 
+	//Initialises the parameters for the asteroid
 	public abstract void initParams();
 	public abstract void hit(Vector3 position, Vector3 direction);
 	public abstract void kill();

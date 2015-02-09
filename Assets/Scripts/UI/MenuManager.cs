@@ -15,6 +15,12 @@ public class MenuManager
 		return (GameObject.Instantiate(resource) as GameObject).GetComponent<GameMenu>();
 	}
 
+	public static SinglePlayerModeMenu instantiateSinglePlayerModeMenu()
+	{
+		GameObject resource = Resources.Load<GameObject>("Prefabs/Menus/SinglePlayerModeMenu");
+		return (GameObject.Instantiate(resource) as GameObject).GetComponent<SinglePlayerModeMenu>();
+	}
+
 	public static MultiPlayerModeMenu instantiateMultiPlayerModeMenu()
 	{
 		GameObject resource = Resources.Load<GameObject>("Prefabs/Menus/MultiPlayerModeMenu");

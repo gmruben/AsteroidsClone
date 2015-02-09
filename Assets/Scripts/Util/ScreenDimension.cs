@@ -18,7 +18,7 @@ public class ScreenDimension
 			if (_screenSize == 0)
 			{
 				float ratio = (float) sizeX / sizeY;
-				_screenSize = UIManager.instance.camera.aspect / ratio;
+				_screenSize = UICamera.instance.camera.aspect / ratio;
 			}
 
 			return _screenSize;
@@ -37,22 +37,22 @@ public class ScreenDimension
 
 	public static float screenTop
 	{
-		get { return UIManager.instance.camera.orthographicSize / screenSize; }
+		get { return UICamera.instance.cachedCamera.orthographicSize / screenSize; }
 	}
 	
 	public static float screenBottom
 	{
-		get { return -UIManager.instance.camera.orthographicSize / screenSize; }
+		get { return -UICamera.instance.cachedCamera.orthographicSize / screenSize; }
 	}
 	
 	public static float screenLeft
 	{
-		get { return -(UIManager.instance.camera.orthographicSize * UIManager.instance.camera.aspect) / screenSize; }
+		get { return -(UICamera.instance.cachedCamera.orthographicSize * UICamera.instance.cachedCamera.aspect) / screenSize; }
 	}
 	
 	public static float screenRight
 	{
-		get { return (UIManager.instance.camera.orthographicSize * UIManager.instance.camera.aspect) / screenSize; }
+		get { return (UICamera.instance.cachedCamera.orthographicSize * UICamera.instance.cachedCamera.aspect) / screenSize; }
 	}
 
 	public static Vector2 normalizedMousePosition

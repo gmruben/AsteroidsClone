@@ -2,6 +2,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 
+/// <summary>
+/// This HUD is used in the single player mode
+/// </summary>
 public class SinglePlayerGameHUD : UIMenu
 {
 	public Text score;
@@ -19,8 +22,8 @@ public class SinglePlayerGameHUD : UIMenu
 		score.text = "SCORE: " + value.ToString();
 	}
 
-	public void updateLifes(int value)
+	public void updateLives(int value)
 	{
-		lives.text = "LIFES: " + value.ToString();
+		lives.text = "LIVES: " + value.ToString();
 	}
 }

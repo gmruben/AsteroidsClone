@@ -1,11 +1,14 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
+/// <summary>
+/// This menu contains a list with all the game config parameters so the user can change them
+/// </summary>
 public class GameConfigMenu : UIMenu
 {
-	public VerticalList itemList;
+	public GameConfigDataList itemList;
 
 	public UIButton backButton;
 
@@ -21,7 +24,7 @@ public class GameConfigMenu : UIMenu
 		paramIdList.Add (new GameConfigData (GameConfigParamIds.PlayerMaxSpeed, "PLAYER MAX SPEED", ""));
 		paramIdList.Add (new GameConfigData (GameConfigParamIds.PlayerAngularSpeed, "PLAYER ANGULAR SPEED", ""));
 		paramIdList.Add (new GameConfigData (GameConfigParamIds.PlayerInvulnerableTime, "PLAYER INVULNERABLE TIME", ""));
-		paramIdList.Add (new GameConfigData (GameConfigParamIds.PlayerNumLifes, "PLAYER NUMBER OF LIFES", ""));
+		paramIdList.Add (new GameConfigData (GameConfigParamIds.PlayerNumLives, "PLAYER NUMBER OF LIVES", ""));
 
 		//WEAPONS
 		paramIdList.Add (new GameConfigData (GameConfigParamIds.GunCoolDownTime, "GUN COOLDOWN TIME", ""));

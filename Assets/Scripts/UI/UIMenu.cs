@@ -1,11 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// Abstract class for all the Menu Classes
+/// </summary>
 public abstract class UIMenu : MonoBehaviour
 {
 	void Start()
 	{
-		GetComponent<Canvas>().worldCamera = UIManager.instance.camera;
+		GetComponent<Canvas>().worldCamera = UICamera.instance.cachedCamera;
 		GetComponent<RectTransform>().localScale = Vector3.one * ScreenDimension.screenSize;
 
 		Transform topTransform = transform.FindChild("Top");

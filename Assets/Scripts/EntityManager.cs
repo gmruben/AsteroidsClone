@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// This class have functions for instantiating all the entities in the game. If controls that entities
+/// that are instantiated intensively are retrieved from a pool.
+/// </summary>
 public class EntityManager
 {
 	public static Player instantiatePlayer()
@@ -26,12 +30,13 @@ public class EntityManager
 
 	public static Asteroid instantiateAsteroid(string id)
 	{
+		//We have a different pool for each type of asteroid
 		return PoolManager.instance.retrievePoolInstance (id).GetComponent<Asteroid>();
 	}
 
 	public static PowerUp instantiatePowerUp(string id)
 	{
-		GameObject resource = Resources.Load<GameObject>("Prefabs/PowerUp_HeavyMachineGun");
+		GameObject resource = Resources.Load<GameObject>("Prefabs/PowerUp_" + id);
 		return (GameObject.Instantiate(resource) as GameObject).GetComponent<PowerUp>();
 	}
 }

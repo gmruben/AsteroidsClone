@@ -2,6 +2,9 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+/// <summary>
+/// This is where the main game occurs.
+/// </summary>
 public class Game : MonoBehaviour
 {
 	public AsteroidManager asteroidManager;
@@ -11,12 +14,28 @@ public class Game : MonoBehaviour
 
 	private bool isActive = true;
 
-	private List<IUpdatable> updatableItemList = new List<IUpdatable>();
+	private List<IUpdateable> updatableItemList = new List<IUpdateable>();
 
 	private GameModeController gameModeController;
 
 	void Awake()
 	{
+		//If there is no game config, create one (just in case we started the game from "Game" scene)
+		if (AsteroidsGameConfig.playerConfigList.Count == 0)
+		{
+			GameSaveManager.loadData();
+
+			//Create config for player
+			InputController inputController = new InputController(KeyCode.LeftArrow, KeyCode.RightArrow, KeyCode.UpArrow, KeyCode.DownArrow);
+			PlayerConfig playerConfig = new PlayerConfig(PlayerIndex.P1, Color.white, inputController);
+			
+			//Create config for Single Player Mode Game
+			AsteroidsGameConfig.playerConfigList.Clear();
+			AsteroidsGameConfig.playerConfigList.Add(playerConfig);
+
+			AsteroidsGameConfig.gameMode = GameModes.SinglePlayerMode;
+		}
+
 		init ();
 	}
 
@@ -42,15 +61,8 @@ public class Game : MonoBehaviour
 		gameModeController.onGamePause += onGamePause;
 		gameModeController.onGameRestart += onGameRestart;
 		gameModeController.onGameEnd += onGameEnd;
-
-		LevelConfig levelConfig = new LevelConfig();
-
-		levelConfig.spawnTime = 5;
-		levelConfig.numAsteroids = 3;
-
-		asteroidManager.init(levelConfig);
-		asteroidManager.onEnd += onAsteroidManagerEnd;
-
+	
+		asteroidManager.init();
 		powerUpManager.init();
 
 		//Add all the updatable items to the list
@@ -67,14 +79,11 @@ public class Game : MonoBehaviour
 		PoolManager.instance.createPool ("asteroid_small", Resources.Load("Prefabs/Asteroid_Small") as GameObject, 50);
 	}
 
-	private void onAsteroidManagerEnd()
-	{
-		Debug.Log("YAY!");
-	}
-
 	private void restartGame()
 	{
 		asteroidManager.clear();
+		powerUpManager.clear();
+
 		setGamePause(false);
 	}
 
@@ -84,17 +93,6 @@ public class Game : MonoBehaviour
 		PoolManager.instance.clearPoolList();
 		Application.LoadLevel("Menus");
 	}
-
-	/*private IEnumerator showGameOverMenu()
-	{
-		yield return new WaitForSeconds(0.5f);
-
-		gameOverMenu = MenuManager.instantiateGameOverMenu();
-		gameOverMenu.init();
-		
-		gameOverMenu.retryButton.onClick += onRetryButtonClick;
-		gameOverMenu.mainMenuButton.onClick += onMainMenuButtonClick;
-	}*/
 
 	private void onGamePause()
 	{

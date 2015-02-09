@@ -25,6 +25,11 @@ public class GameCamera : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Shakes the camera (it is used for explosions and stuff like that)
+	/// </summary>
+	/// <param name="time">How long the shake is.</param>
+	/// <param name="intensity">How intense the shake is.</param>
 	public void shake(float time, float intensity)
 	{
 		this.time = time;
@@ -39,6 +44,9 @@ public class GameCamera : MonoBehaviour
 		initialPosition = cachedTransform.position;
 	}
 
+	/// <summary>
+	/// Coroutine for updating the shake.
+	/// </summary>
 	private IEnumerator updateShake()
 	{
 		while(time > 0.0f)

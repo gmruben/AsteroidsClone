@@ -3,6 +3,9 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
+/// <summary>
+/// This HUD is used in the multi player mode
+/// </summary>
 public class MultiPlayerGameHUD : UIMenu
 {
 	private const int numPlayers = 4;

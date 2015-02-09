@@ -25,15 +25,7 @@ public class GameMenu : UIMenu
 
 	private void onSingleModeButtonClick()
 	{
-		//Create config for player
-		PlayerInput inputController = new PlayerInput(KeyCode.LeftArrow, KeyCode.RightArrow, KeyCode.UpArrow, KeyCode.DownArrow);
-		PlayerConfig playerConfig = new PlayerConfig(PlayerIndex.P1, PlayerColor.P1, inputController);
-
-		//Create config for Single Player Mode
-		AsteroidsGameConfig.playerConfigList.Add(playerConfig);
-		AsteroidsGameConfig.gameMode = GameModes.SinglePlayerMode;
-
-		Application.LoadLevel("Game");
+		App.instance.showSinglePlayerModeMenu();
 	}
 
 	private void onMultiModeButtonClick()

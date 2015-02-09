@@ -1,12 +1,12 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class Asteroid_Medium : Asteroid
 {
 	public override void initParams()
 	{
-		score = GameConfig.instance.retrieveParamValue<int>(GameConfigParamIds.AsteroidMediumScore);
-		speed = GameConfig.instance.retrieveParamValue<float>(GameConfigParamIds.AsteroidMediumSpeed);
+		score = GameParamConfig.instance.retrieveParamValue<int>(GameConfigParamIds.AsteroidMediumScore);
+		speed = GameParamConfig.instance.retrieveParamValue<float>(GameConfigParamIds.AsteroidMediumSpeed);
 	}
 
 	public override void hit(Vector3 position, Vector3 direction)
@@ -23,8 +23,6 @@ public class Asteroid_Medium : Asteroid
 	public override void kill()
 	{
 		PoolManager.instance.destroyInstance(GetComponent<PoolInstance>());
-
-		CustomParticleEmitter customParticleEmitter = new CustomParticleEmitter();
-		customParticleEmitter.explode2(Color.white, cachedTransform.position);
+		customParticleEmitter.explosion(Color.white, cachedTransform.position);
 	}
 }

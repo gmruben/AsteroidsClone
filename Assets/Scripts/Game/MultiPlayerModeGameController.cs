@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
@@ -18,7 +18,7 @@ public class MultiPlayerModeGameController : GameModeController
 		gameHUD = MenuManager.instantiateMultiPlayerGameHUD();
 		gameHUD.pauseButton.onClick += onPauseButtonClick;
 
-		int playerNumLifes = GameConfig.instance.retrieveParamValue<int>(GameConfigParamIds.PlayerNumLifes);
+		int playerNumLives = GameParamConfig.instance.retrieveParamValue<int>(GameConfigParamIds.PlayerNumLives);
 
 		for (int i = 0; i < playerConfigList.Count; i++)
 		{
@@ -26,7 +26,7 @@ public class MultiPlayerModeGameController : GameModeController
 			playerList.Add(player);
 
 			player.init(this, playerConfigList[i]);
-			player.reset(playerNumLifes);
+			player.reset(playerNumLives);
 			
 			player.onDead += onPlayerDead;
 		}
@@ -49,10 +49,10 @@ public class MultiPlayerModeGameController : GameModeController
 
 	public override void reset()
 	{
-		int playerNumLifes = GameConfig.instance.retrieveParamValue<int>(GameConfigParamIds.PlayerNumLifes);
+		int playerNumLives = GameParamConfig.instance.retrieveParamValue<int>(GameConfigParamIds.PlayerNumLives);
 		for (int i = 0; i < playerList.Count; i++)
 		{
-			playerList[i].reset(playerNumLifes);
+			playerList[i].reset(playerNumLives);
 		}
 	}
 
@@ -63,12 +63,26 @@ public class MultiPlayerModeGameController : GameModeController
 		{
 			//Pause the game
 			game.setGamePause(true);
-			
+
+			//Check if we have a new highscore
+			int score = getHighestScore();
+			if (score > GameSaveManager.gameSave.highscore)
+			{
+				GameSaveManager.gameSave.highscore = score;
+				GameSaveManager.saveData();
+			}
+
 			//We use a coroutine to delay the Game Over Menu a bit after the death
 			game.StartCoroutine(showGameOverMenu());
+
+			MessageBus.dispatchGameEnd();
 		}
 	}
 
+	/// <summary>
+	/// Checks whether all the players in the game are dead or not
+	/// </summary>
+	/// <returns><c>true</c>, if all players are dead, <c>false</c> otherwise.</returns>
 	private bool allPlayersAreDead()
 	{
 		for (int i = 0; i < playerList.Count; i++)
@@ -76,6 +90,19 @@ public class MultiPlayerModeGameController : GameModeController
 			if (!playerList[i].isDead) return false;
 		}
 		return true;
+	}
+
+	private int getHighestScore()
+	{
+		int score = -1;
+		for (int i = 0; i < playerList.Count; i++)
+		{
+			if (playerList[i].score > score)
+			{
+				score = playerList[i].score;
+			}
+		}
+		return score;
 	}
 
 	private void onPauseButtonClick()

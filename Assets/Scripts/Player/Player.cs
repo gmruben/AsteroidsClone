@@ -7,10 +7,12 @@ public class Player : MonoBehaviour
 	public event Action onDead;
 
 	public GameObject graphic;
-	public PlayerTimer timer;
+	public TextMesh timer;
 
 	private PlayerController playerController;
 	private IWeaponController weaponController;
+
+	CustomParticleEmitter customParticleEmitter;
 	
 	[HideInInspector]
 	public Transform cachedTransform;
@@ -29,6 +31,7 @@ public class Player : MonoBehaviour
 	private float invulnerableCounter;
 
 	private PlayerConfig playerConfig;
+	private PowerUp currentPowerUp;
 
 	void Update()
 	{
@@ -61,9 +64,13 @@ public class Player : MonoBehaviour
 		playerController = new PlayerController(playerConfig.inputController, playerAnimator, cachedTransform);
 		weaponController = new GunController(playerConfig.inputController, this);
 
-		invulnerableTime = GameConfig.instance.retrieveParamValue<float>(GameConfigParamIds.PlayerInvulnerableTime);
+		customParticleEmitter = new CustomParticleEmitter();
+
+		invulnerableTime = GameParamConfig.instance.retrieveParamValue<float>(GameConfigParamIds.PlayerInvulnerableTime);
 
 		MessageBus.onGamePause += onGamePause;
+
+		endTimer();
 	}
 
 	public void changeShootController(IWeaponController controller)
@@ -77,15 +84,14 @@ public class Player : MonoBehaviour
 		{
 			if (other.CompareTag(TagNames.PowerUp))
 			{
-				other.GetComponent<PowerUp>().pickUp(this);
+				currentPowerUp = other.GetComponent<PowerUp>();
+				currentPowerUp.pickUp(this);
 			}
 			else if (other.CompareTag(TagNames.Asteroid) && !isInvulnerable)
 			{
 				other.GetComponent<Asteroid>().kill();
 
-				CustomParticleEmitter customParticleEmitter = new CustomParticleEmitter();
-				customParticleEmitter.explode2(color, cachedTransform.position);
-			
+				customParticleEmitter.explosion(color, cachedTransform.position);
 				kill ();
 			}
 		}
@@ -93,7 +99,18 @@ public class Player : MonoBehaviour
 
 	public void setTimer(float time)
 	{
-		timer.start(time);
+		timer.gameObject.SetActive(true);
+		updateTimer(time);
+	}
+
+	public void updateTimer(float time)
+	{
+		timer.text = Mathf.CeilToInt(time).ToString();
+	}
+
+	public void endTimer()
+	{
+		timer.gameObject.SetActive(false);
 	}
 
 	public void addScore(int score)
@@ -109,6 +126,11 @@ public class Player : MonoBehaviour
 
 		numLives --;
 		gameController.updateLives(this);
+
+		if (currentPowerUp != null)
+		{
+			currentPowerUp.end();
+		}
 
 		if (numLives > 0)
 		{
@@ -141,12 +163,12 @@ public class Player : MonoBehaviour
 		playerAnimator.setInvulnerable(true);
 	}
 
-	public void reset(int numLifes)
+	public void reset(int numLives)
 	{
 		respawn();
 
 		score = 0;
-		this.numLives = numLifes;
+		this.numLives = numLives;
 
 		gameController.updateScore(this);
 		gameController.updateLives(this);
@@ -172,7 +194,7 @@ public class Player : MonoBehaviour
 		get { return playerConfig.color; }
 	}
 
-	public PlayerInput inputController
+	public InputController inputController
 	{
 		get { return playerConfig.inputController; }
 	}

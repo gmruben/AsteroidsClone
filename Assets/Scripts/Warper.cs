@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class WarpController
+/// <summary>
+/// This class controls that a transform warps from one side of the screen to the other
+/// </summary>
+public class Warper
 {
 	private Transform cachedTransform;
 
@@ -12,7 +15,7 @@ public class WarpController
 	private readonly float top;
 	private readonly float bottom;
 
-	public WarpController(Transform transform)
+	public Warper(Transform transform)
 	{
 		this.cachedTransform = transform;
 

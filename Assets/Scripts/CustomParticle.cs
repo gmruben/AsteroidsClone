@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// A simple particle for the custom particle emitter
+/// </summary>
 public class CustomParticle : MonoBehaviour
 {
 	private float life;

@@ -1,15 +1,15 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class MachineGunController : IWeaponController
 {
-	private PlayerInput playerInput;
+	private InputController playerInput;
 	private Player player;
 
 	private bool isOn = false;
 	private float coolDown = 0;
 	
-	public MachineGunController(PlayerInput playerInput, Player player)
+	public MachineGunController(InputController playerInput, Player player)
 	{
 		this.playerInput = playerInput;
 		this.player = player;

@@ -1,13 +1,13 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class PlayerConfig
 {
 	public int index;
 	public Color color;
-	public PlayerInput inputController;
+	public InputController inputController;
 
-	public PlayerConfig(int index, Color color, PlayerInput inputController)
+	public PlayerConfig(int index, Color color, InputController inputController)
 	{
 		this.index = index;
 		this.color = color;

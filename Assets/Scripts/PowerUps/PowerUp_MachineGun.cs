@@ -1,24 +1,20 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class PowerUp_MachineGun : PowerUp
 {
-	private Player player;
-
-	private bool isActive = false;
-	private float time;
-
 	public override void pickUp(Player player)
 	{
 		this.player = player;
 
 		isActive = true;
-		time = 5;
+		time = GameParamConfig.instance.retrieveParamValue<float>(GameConfigParamIds.MachineGunPowerUpTime);
 
-		player.setTimer(5);
+		player.setTimer(time);
 		player.changeShootController(new MachineGunController(player.inputController, player));
 
 		sprite.gameObject.SetActive(false);
+		dispatchOnPickUp();
 	}
 
 	void Update()
@@ -26,13 +22,19 @@ public class PowerUp_MachineGun : PowerUp
 		if (isActive)
 		{
 			time -= Time.deltaTime;
-			if (time <= 0) end ();
+			player.updateTimer(time);
+			if (time <= 0)
+			{
+				end ();
+			}
 		}
 	}
 
-	public void end()
+	public override void end()
 	{
+		player.endTimer();
 		player.changeShootController(new GunController(player.inputController, player));
+
 		GameObject.Destroy(gameObject);
 	}
 }

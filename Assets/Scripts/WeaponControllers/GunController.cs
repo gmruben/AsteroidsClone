@@ -1,20 +1,20 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class GunController : IWeaponController
 {
-	private PlayerInput playerInput;
+	private InputController playerInput;
 	private Player player;
 
 	private float coolDownTime;
 	private float counter = 0;
 
-	public GunController(PlayerInput playerInput, Player player)
+	public GunController(InputController playerInput, Player player)
 	{
 		this.playerInput = playerInput;
 		this.player = player;
 
-		coolDownTime = GameConfig.instance.retrieveParamValue<float>(GameConfigParamIds.GunCoolDownTime);
+		coolDownTime = GameParamConfig.instance.retrieveParamValue<float>(GameConfigParamIds.GunCoolDownTime);
 	}
 
 	public void update(float deltaTime)
