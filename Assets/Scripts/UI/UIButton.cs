@@ -3,6 +3,9 @@ using UnityEngine.UI;
 using System;
 using System.Collections;
 
+/// <summary>
+/// A class for a simple button.
+/// </summary>
 public class UIButton : MonoBehaviour
 {
 	public event Action onClick;

@@ -33,6 +33,7 @@ public class GameConfigMenu : UIMenu
 		paramIdList.Add (new GameConfigData (GameConfigParamIds.ShotGunCoolDownTime, "SHOTGUN COOLDOWN TIME", ""));
 		
 		//ASTEROIDS
+		paramIdList.Add (new GameConfigData (GameConfigParamIds.AsteroidSpawnTime, "ASTEROID SPAWN TIME", ""));
 		paramIdList.Add (new GameConfigData (GameConfigParamIds.AsteroidSmallScore, "SMALL ASTEROID SCORE", ""));
 		paramIdList.Add (new GameConfigData (GameConfigParamIds.AsteroidSmallSpeed, "SMALL ASTEROID SPEED", ""));
 		paramIdList.Add (new GameConfigData (GameConfigParamIds.AsteroidMediumScore, "MEDIUM ASTEROID SCORE", ""));

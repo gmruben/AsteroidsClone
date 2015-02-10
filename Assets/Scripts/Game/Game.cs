@@ -9,6 +9,7 @@ using System.Linq;
 /// </summary>
 public class Game : MonoBehaviour
 {
+	//Spawn points for single and multi player modes
 	public Transform singlePlayerSpawnPoint;
 	public Transform[] multiPlayerSpawnPointList;
 
@@ -19,13 +20,15 @@ public class Game : MonoBehaviour
 
 	private bool isActive = true;
 
+	//List with all the entities the game needs to update
 	private List<IUpdateable> updatableItemList = new List<IUpdateable>();
 
+	//This object controls the specific logic for each game mode
 	private GameModeController gameModeController;
 
 	void Awake()
 	{
-		//If there is no game config, create one (just in case we started the game from "Game" scene)
+		//If there is no game config, create one (only for development: just in case we started the game from "Game" scene)
 		if (AsteroidsGameConfig.playerConfigList.Count == 0)
 		{
 			GameSaveManager.loadData();
@@ -90,6 +93,14 @@ public class Game : MonoBehaviour
 		PoolManager.instance.createPool (PoolIds.AsteroidMedium, Resources.Load("Prefabs/Asteroid_Medium") as GameObject, 50);
 		PoolManager.instance.createPool (PoolIds.AsteroidSmall, Resources.Load("Prefabs/Asteroid_Small") as GameObject, 50);
 	}
+	
+	public void setGamePause(bool isPause)
+	{
+		isActive = !isPause;
+		MessageBus.dispatchGamePause(isPause);
+		
+		gameModeController.setActive(!isPause);
+	}
 
 	private void restartGame()
 	{
@@ -116,9 +127,7 @@ public class Game : MonoBehaviour
 		pauseMenu = MenuManager.instantiatePauseMenu();
 		pauseMenu.init();
 
-		pauseMenu.resumeButton.onClick += onResumeButtonClick;
-		pauseMenu.restartButton.onClick += onRestartButtonClick;
-		pauseMenu.mainMenuButton.onClick += onPauseMainMenuButtonClick;
+		addPauseListeners();
 	}
 
 	private void onGameRestart()
@@ -133,10 +142,7 @@ public class Game : MonoBehaviour
 
 	private void onResumeButtonClick()
 	{
-		pauseMenu.resumeButton.onClick -= onResumeButtonClick;
-		pauseMenu.restartButton.onClick -= onRestartButtonClick;
-		pauseMenu.mainMenuButton.onClick -= onPauseMainMenuButtonClick;
-
+		removePauseListeners();
 		GameObject.Destroy(pauseMenu.gameObject);
 
 		setGamePause(false);
@@ -144,10 +150,7 @@ public class Game : MonoBehaviour
 
 	private void onRestartButtonClick()
 	{
-		pauseMenu.resumeButton.onClick -= onResumeButtonClick;
-		pauseMenu.restartButton.onClick -= onRestartButtonClick;
-		pauseMenu.mainMenuButton.onClick -= onPauseMainMenuButtonClick;
-
+		removePauseListeners();
 		GameObject.Destroy(pauseMenu.gameObject);
 		
 		restartGame();
@@ -158,20 +161,23 @@ public class Game : MonoBehaviour
 
 	private void onPauseMainMenuButtonClick()
 	{
-		pauseMenu.resumeButton.onClick -= onResumeButtonClick;
-		pauseMenu.restartButton.onClick -= onRestartButtonClick;
-		pauseMenu.mainMenuButton.onClick -= onPauseMainMenuButtonClick;
-
+		removePauseListeners();
 		GameObject.Destroy(pauseMenu.gameObject);
 		
 		returnToMainMenu();
 	}
 
-	public void setGamePause(bool isPause)
+	private void addPauseListeners()
 	{
-		isActive = !isPause;
-		MessageBus.dispatchGamePause(isPause);
+		pauseMenu.resumeButton.onClick += onResumeButtonClick;
+		pauseMenu.restartButton.onClick += onRestartButtonClick;
+		pauseMenu.mainMenuButton.onClick += onPauseMainMenuButtonClick;
+	}
 
-		gameModeController.setActive(!isPause);
+	private void removePauseListeners()
+	{
+		pauseMenu.resumeButton.onClick -= onResumeButtonClick;
+		pauseMenu.restartButton.onClick -= onRestartButtonClick;
+		pauseMenu.mainMenuButton.onClick -= onPauseMainMenuButtonClick;
 	}
 }

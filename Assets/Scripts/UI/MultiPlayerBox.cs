@@ -2,6 +2,9 @@
 using System;
 using System.Collections;
 
+/// <summary>
+/// The player box from the multiplayer menu.
+/// </summary>
 public class MultiPlayerBox : MonoBehaviour
 {
 	public event Action<int, bool> onReady;

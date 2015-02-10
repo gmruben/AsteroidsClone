@@ -29,7 +29,7 @@ public abstract class PowerUp : MonoBehaviour
 		if (isActive)
 		{
 			time -= Time.deltaTime;
-			player.updateTimer(time);
+			player.playerTimer.updateTimer(time);
 			
 			if (time <= 0)
 			{

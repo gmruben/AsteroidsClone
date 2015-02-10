@@ -20,7 +20,6 @@ public class PoolManager : MonoBehaviour
 			{
 				_instance = new GameObject("PoolManager").AddComponent<PoolManager>();
 			}
-			
 			return _instance;
 		}
 	}
@@ -37,6 +36,12 @@ public class PoolManager : MonoBehaviour
 		poolList.Clear();
 	}
 
+	/// <summary>
+	/// Creates a new pool
+	/// </summary>
+	/// <param name="poolId">The Pool id.</param>
+	/// <param name="prefab">The prefab to instantiate all the instances.</param>
+	/// <param name="numInstances">Number of instances.</param>
 	public void createPool(string poolId, GameObject prefab, int numInstances)
 	{
 		PoolData poolData = new PoolData ();

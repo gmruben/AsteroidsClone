@@ -25,6 +25,7 @@ public class PowerUpManager : MonoBehaviour, IUpdateable
 
 	public void update(float time)
 	{
+		//Check if it is time to spawn a new power up
 		if (canSpawn)
 		{
 			spawnCounter += time;
@@ -33,6 +34,7 @@ public class PowerUpManager : MonoBehaviour, IUpdateable
 				spawnCounter = 0;
 				canSpawn = false;
 
+				//Get a random position to spawn the power up
 				int randomIndex = UnityEngine.Random.Range(0, spawnPointList.Length);
 				Vector3 position = spawnPointList[randomIndex].position;
 
@@ -52,9 +54,14 @@ public class PowerUpManager : MonoBehaviour, IUpdateable
 		if (powerUp != null) GameObject.Destroy(powerUp.gameObject);
 	}
 
+	/// <summary>
+	/// Called when the current power up has been picked up
+	/// </summary>
 	private void onPowerUpPickUp()
 	{
 		powerUp.onPickUp -= onPowerUpPickUp;
+
+		//The power up manager only spawns one power up at a time
 		canSpawn = true;
 	}
 }

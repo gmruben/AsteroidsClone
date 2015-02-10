@@ -1,6 +1,10 @@
 using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// This class has the logic for the single player game mode. It updates the score and lives of the player and
+/// dispatches game flow related events.
+/// </summary>
 public class SinglePlayerModeGameController : GameModeController
 {
 	private Game game;

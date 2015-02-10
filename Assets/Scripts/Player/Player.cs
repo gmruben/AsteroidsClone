@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
 	public Transform cachedTransform;
 
 	public GameObject graphic;
-	public TextMesh timer;
+	public PlayerTimer playerTimer;
 	public PlayerAnimator playerAnimator;
 
 	private PlayerController playerController;
@@ -53,6 +53,27 @@ public class Player : MonoBehaviour
 		}
 	}
 
+	void OnTriggerEnter2D(Collider2D other)
+	{
+		if (isActive)
+		{
+			if (other.CompareTag(TagNames.PowerUp))
+			{
+				currentPowerUp = other.GetComponent<PowerUp>();
+				currentPowerUp.pickUp(this);
+			}
+			else if (other.CompareTag(TagNames.Asteroid) && !isInvulnerable)
+			{
+				other.GetComponent<Asteroid>().hit(cachedTransform.position, cachedTransform.up);
+				
+				GameCamera.instance.shake(0.5f,0.5f);
+				customParticleEmitter.explosion(color, cachedTransform.position);
+				
+				hit ();
+			}
+		}
+	}
+
 	public void init(GameModeController gameController, PlayerConfig playerConfig)
 	{
 		this.gameController = gameController;
@@ -70,48 +91,11 @@ public class Player : MonoBehaviour
 		invulnerableTime = GameParamConfig.instance.retrieveParamValue<float>(GameConfigParamIds.PlayerInvulnerableTime);
 
 		MessageBus.onGamePause += onGamePause;
-
-		endTimer();
 	}
 
 	public void changeShootController(WeaponController controller)
 	{
 		weaponController = controller;
-	}
-
-	void OnTriggerEnter2D(Collider2D other)
-	{
-		if (isActive)
-		{
-			if (other.CompareTag(TagNames.PowerUp))
-			{
-				currentPowerUp = other.GetComponent<PowerUp>();
-				currentPowerUp.pickUp(this);
-			}
-			else if (other.CompareTag(TagNames.Asteroid) && !isInvulnerable)
-			{
-				other.GetComponent<Asteroid>().hit(cachedTransform.position, cachedTransform.up);
-
-				customParticleEmitter.explosion(color, cachedTransform.position);
-				hit ();
-			}
-		}
-	}
-
-	public void setTimer(float time)
-	{
-		timer.gameObject.SetActive(true);
-		updateTimer(time);
-	}
-
-	public void updateTimer(float time)
-	{
-		timer.text = Mathf.CeilToInt(time).ToString();
-	}
-
-	public void endTimer()
-	{
-		timer.gameObject.SetActive(false);
 	}
 
 	public void addScore(int score)
@@ -123,9 +107,11 @@ public class Player : MonoBehaviour
 
 	private void hit()
 	{
+		//Set inactive until respawned
 		isActive = false;
 		graphic.SetActive(false);
 
+		//When a player is hit, it loses one life
 		numLives --;
 		gameController.updateLives(this);
 

@@ -37,6 +37,9 @@ public class PlayerAnimator : MonoBehaviour
 	}
 }
 
+/// <summary>
+/// Ids for the player animation parameters
+/// </summary>
 public class PlayerAnimationParamIds
 {
 	public static string InThrust = "InThrust";

@@ -39,9 +39,11 @@ public class PlayerController
 	{
 		float angSpeed = 0;
 
+		//Calculate the angular speed
 		if (inputController.isKey(PlayerInputKeyIds.Left)) angSpeed = -angularSpeed * deltaTime;
 		else if (inputController.isKey(PlayerInputKeyIds.Right)) angSpeed = angularSpeed * deltaTime;
 
+		//Calculate the speed
 		Vector2 deltaSpeed = Vector2.zero;
 		if (inputController.isKey (PlayerInputKeyIds.Up))
 		{
@@ -49,6 +51,7 @@ public class PlayerController
 		}
 
 		speed += deltaSpeed;
+		//Send to the player animator whether we are in thrust or not
 		playerAnimator.thrust(deltaSpeed != Vector2.zero);
 
 		//Clamp speed
@@ -57,9 +60,11 @@ public class PlayerController
 			speed = speed.normalized * maxSpeed;
 		}
 
+		//Update transform
 		playerTransform.position += new Vector3(speed.x, speed.y, 0) * deltaTime;
 		playerTransform.Rotate(Vector3.back, angSpeed);
 
+		//Check if we need to warp the player
 		warper.checkWarp();
 	}
 

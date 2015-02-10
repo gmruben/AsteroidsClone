@@ -30,6 +30,22 @@ public class Bullet : MonoBehaviour
 		MessageBus.onGameEnd += onGameEnd;
 	}
 
+	void OnTriggerEnter2D(Collider2D other)
+	{
+		if (other.CompareTag(TagNames.Asteroid))
+		{
+			Asteroid asteroid = other.GetComponent<Asteroid>();
+			asteroid.hit(cachedTransform.position, direction);
+			
+			customParticleEmitter.hit(Color.white, cachedTransform.position, -direction);
+			
+			player.addScore(asteroid.score);
+			PoolManager.instance.destroyInstance(GetComponent<PoolInstance>());
+			
+			GameCamera.instance.shake(0.25f, 0.25f);
+		}
+	}
+
 	public void init(Player player, Vector3 direction)
 	{
 		this.player = player;
@@ -45,24 +61,9 @@ public class Bullet : MonoBehaviour
 			cachedTransform.position += direction * speed * Time.deltaTime;
 			warper.checkWarp();
 
+			//When a bullet dies it is sent back to the pool
 			lifeTimer -= Time.deltaTime;
 			if (lifeTimer < 0) PoolManager.instance.destroyInstance(GetComponent<PoolInstance>());
-		}
-	}
-
-	void OnTriggerEnter2D(Collider2D other)
-	{
-		if (other.CompareTag(TagNames.Asteroid))
-		{
-			Asteroid asteroid = other.GetComponent<Asteroid>();
-			asteroid.hit(cachedTransform.position, direction);
-
-			customParticleEmitter.hit(Color.white, cachedTransform.position, -direction);
-
-			player.addScore(asteroid.score);
-			PoolManager.instance.destroyInstance(GetComponent<PoolInstance>());
-
-			GameCamera.instance.shake(0.25f, 0.25f);
 		}
 	}
 

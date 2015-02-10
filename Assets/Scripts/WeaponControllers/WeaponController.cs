@@ -13,6 +13,7 @@ public abstract class WeaponController
 	protected bool isActionUp = false;
 	protected bool isActionDown = false;
 
+	//The weapons have a cooldown time so they don't shoot at a high rate when pressing the action button down
 	protected float coolDownTime;
 	protected float coolDownCounter = 0;
 
@@ -35,7 +36,7 @@ public abstract class WeaponController
 				shoot(player.cachedTransform.up);
 			}
 		}
-		else if (inputController.isKeyUp(PlayerInputKeyIds.Action))
+		else if (!inputController.isKey(PlayerInputKeyIds.Action))
 		{
 			isActionUp = true;
 		}

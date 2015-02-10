@@ -12,13 +12,13 @@ public class PowerUp_ShotGun : PowerUp
 	{
 		time = GameParamConfig.instance.retrieveParamValue<float>(GameConfigParamIds.ShotGunPowerUpTime);
 
-		player.setTimer(time);
+		player.playerTimer.startTimer(time);
 		player.changeShootController(new ShotGunController(player.inputController, player));
 	}
 
 	public override void end()
 	{
-		player.endTimer();
+		player.playerTimer.endTimer();
 		player.changeShootController(new GunController(player.inputController, player));
 
 		GameObject.Destroy(gameObject);

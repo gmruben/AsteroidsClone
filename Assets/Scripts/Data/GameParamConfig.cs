@@ -50,6 +50,7 @@ public class GameParamConfig
 		parameterList.Add (GameConfigParamIds.ShotGunPowerUpTime, "5.0");
 
 		//ASTEROIDS
+		parameterList.Add (GameConfigParamIds.AsteroidSpawnTime, "5");
 		parameterList.Add (GameConfigParamIds.AsteroidSmallScore, "50");
 		parameterList.Add (GameConfigParamIds.AsteroidSmallSpeed, "15.0");
 		parameterList.Add (GameConfigParamIds.AsteroidMediumScore, "25");
@@ -63,6 +64,12 @@ public class GameParamConfig
 		parameterList[id] = value;
 	}
 
+	/// <summary>
+	/// Retrieves a parameters value by its id
+	/// </summary>
+	/// <returns>The parameter value.</returns>
+	/// <param name="id">The parameter id.</param>
+	/// <typeparam name="T">The type of the value we want to retrieve.</typeparam>
 	public T retrieveParamValue<T>(string id)
 	{
 		object value = null;
@@ -80,11 +87,11 @@ public class GameParamConfig
 	}
 
 	/// <summary>
-	/// Casts a value to an specific type
+	/// Casts a value in string format to an specific type
 	/// </summary>
 	/// <returns>The value casted to the correct type.</returns>
 	/// <param name="value">Value.</param>
-	/// <typeparam name="T">The type of the value.</typeparam>
+	/// <typeparam name="T">The type of the value we want to cast it to.</typeparam>
 	private T retrieveValueByType<T>(string value)
 	{
 		object newValue = null;
@@ -133,6 +140,7 @@ public class GameConfigParamIds
 	public static string ShotGunPowerUpTime = "ShotGunPowerUpTime";
 
 	//ASTEROIDS
+	public static string AsteroidSpawnTime = "AsteroidSpawnTime";
 	public static string AsteroidSmallScore = "AsteroidSmallScore";
 	public static string AsteroidSmallSpeed = "AsteroidSmallSpeed";
 	public static string AsteroidMediumScore = "AsteroidMediumScore";

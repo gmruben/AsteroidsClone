@@ -36,6 +36,7 @@ public class EntityManager
 
 	public static PowerUp instantiatePowerUp(string id)
 	{
+		//Not many power ups are instantiated, so we dont need to create a pool for them
 		GameObject resource = Resources.Load<GameObject>("Prefabs/PowerUp_" + id);
 		return (GameObject.Instantiate(resource) as GameObject).GetComponent<PowerUp>();
 	}

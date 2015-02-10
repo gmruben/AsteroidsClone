@@ -3,6 +3,10 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
+/// <summary>
+/// This class has the logic for the multi player game mode. It updates the scores and lives of the different players and
+/// dispatches game flow related events.
+/// </summary>
 public class MultiPlayerModeGameController : GameModeController
 {
 	private Game game;
@@ -23,6 +27,7 @@ public class MultiPlayerModeGameController : GameModeController
 
 		int playerNumLives = GameParamConfig.instance.retrieveParamValue<int>(GameConfigParamIds.PlayerNumLives);
 
+		//Initialize all the players
 		for (int i = 0; i < playerConfigList.Count; i++)
 		{
 			Player player = EntityManager.instantiatePlayer();
@@ -52,6 +57,7 @@ public class MultiPlayerModeGameController : GameModeController
 
 	public override void reset()
 	{
+		//Respawn all the players
 		int playerNumLives = GameParamConfig.instance.retrieveParamValue<int>(GameConfigParamIds.PlayerNumLives);
 		for (int i = 0; i < playerList.Count; i++)
 		{
@@ -59,6 +65,7 @@ public class MultiPlayerModeGameController : GameModeController
 		}
 	}
 
+	//Called whenever a player dies
 	private void onPlayerDead()
 	{
 		//Check if all the players are dead
@@ -95,6 +102,10 @@ public class MultiPlayerModeGameController : GameModeController
 		return true;
 	}
 
+	/// <summary>
+	/// Returns the highest score among the players
+	/// </summary>
+	/// <returns>The highest score.</returns>
 	private int getHighestScore()
 	{
 		int score = -1;

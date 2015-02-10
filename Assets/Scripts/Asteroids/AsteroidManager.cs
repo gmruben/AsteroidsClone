@@ -15,10 +15,12 @@ public class AsteroidManager : MonoBehaviour, IUpdateable
 	private float asteroidCounter;
 	private List<Asteroid> asteroidList;
 
-	private float spawnTime = 5.0f;
+	private float spawnTime;
 
 	public void init()
 	{
+		spawnTime = GameParamConfig.instance.retrieveParamValue<int>(GameConfigParamIds.AsteroidSpawnTime);
+
 		spawnCounter = 0;
 		asteroidCounter = 0;
 
@@ -27,12 +29,14 @@ public class AsteroidManager : MonoBehaviour, IUpdateable
 
 	public void update(float time)
 	{
+		//Check if it is time to spawn a new asteroid
 		spawnCounter += time;
 		if (spawnCounter > spawnTime)
 		{
 			spawnCounter = 0;
 			asteroidCounter++;
 
+			//Get a random spawn position
 			int randomIndex = UnityEngine.Random.Range(0, spawnPointList.Length);
 			Vector3 position = spawnPointList[randomIndex].position;
 			Vector3 direction = spawnPointList[randomIndex].up;
@@ -41,6 +45,9 @@ public class AsteroidManager : MonoBehaviour, IUpdateable
 		}
 	}
 
+	/// <summary>
+	/// It destroys all the asteroids that are active at the moment
+	/// </summary>
 	public void clear()
 	{
 		spawnCounter = 0;

@@ -15,6 +15,7 @@ public class InputController
 	{
 		inputMap = new Dictionary<string, KeyCode>();
 
+		//Abstract the keyboard keys with the input controller actions
 		inputMap.Add(PlayerInputKeyIds.Left, left);
 		inputMap.Add(PlayerInputKeyIds.Right, right);
 		inputMap.Add(PlayerInputKeyIds.Up, up);
