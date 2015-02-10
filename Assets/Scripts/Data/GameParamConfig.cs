@@ -39,11 +39,15 @@ public class GameParamConfig
 
 		//WEAPONS
 		parameterList.Add (GameConfigParamIds.GunCoolDownTime, "0.5");
+		parameterList.Add (GameConfigParamIds.MachineGunCoolDownTime, "0.15");
+		parameterList.Add (GameConfigParamIds.HeavyMachineGunCoolDownTime, "0.10");
+		parameterList.Add (GameConfigParamIds.ShotGunCoolDownTime, "1.25");
 
 		//POWER UPS
 		parameterList.Add (GameConfigParamIds.PowerUpSpawnTime, "5");
 		parameterList.Add (GameConfigParamIds.MachineGunPowerUpTime, "10.0");
 		parameterList.Add (GameConfigParamIds.HeavyMachineGunPowerUpTime, "5.0");
+		parameterList.Add (GameConfigParamIds.ShotGunPowerUpTime, "5.0");
 
 		//ASTEROIDS
 		parameterList.Add (GameConfigParamIds.AsteroidSmallScore, "50");
@@ -118,11 +122,15 @@ public class GameConfigParamIds
 
 	//WEAPONS
 	public static string GunCoolDownTime = "GunCoolDownTime";
+	public static string MachineGunCoolDownTime = "MachineGunCoolDownTime";
+	public static string HeavyMachineGunCoolDownTime = "HeavyMachineGunCoolDownTime";
+	public static string ShotGunCoolDownTime = "ShotGunCoolDownTime";
 
 	//POWER UPS
 	public static string PowerUpSpawnTime = "PowerUpSpawnTime";
 	public static string MachineGunPowerUpTime = "MachineGunPowerUpTime";
 	public static string HeavyMachineGunPowerUpTime = "HeavyMachineGunPowerUpTime";
+	public static string ShotGunPowerUpTime = "ShotGunPowerUpTime";
 
 	//ASTEROIDS
 	public static string AsteroidSmallScore = "AsteroidSmallScore";

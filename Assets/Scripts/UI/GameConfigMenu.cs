@@ -28,6 +28,9 @@ public class GameConfigMenu : UIMenu
 
 		//WEAPONS
 		paramIdList.Add (new GameConfigData (GameConfigParamIds.GunCoolDownTime, "GUN COOLDOWN TIME", ""));
+		paramIdList.Add (new GameConfigData (GameConfigParamIds.MachineGunCoolDownTime, "MACHINE GUN COOLDOWN TIME", ""));
+		paramIdList.Add (new GameConfigData (GameConfigParamIds.HeavyMachineGunCoolDownTime, "HEAVY MACHINE GUN COOLDOWN TIME", ""));
+		paramIdList.Add (new GameConfigData (GameConfigParamIds.ShotGunCoolDownTime, "SHOTGUN COOLDOWN TIME", ""));
 		
 		//ASTEROIDS
 		paramIdList.Add (new GameConfigData (GameConfigParamIds.AsteroidSmallScore, "SMALL ASTEROID SCORE", ""));

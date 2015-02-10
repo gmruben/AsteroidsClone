@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class PowerUp_MachineGun : PowerUp
+public class PowerUp_ShotGun : PowerUp
 {
 	protected override void Update()
 	{
@@ -10,10 +10,10 @@ public class PowerUp_MachineGun : PowerUp
 
 	public override void start()
 	{
-		time = GameParamConfig.instance.retrieveParamValue<float>(GameConfigParamIds.MachineGunPowerUpTime);
+		time = GameParamConfig.instance.retrieveParamValue<float>(GameConfigParamIds.ShotGunPowerUpTime);
 
 		player.setTimer(time);
-		player.changeShootController(new MachineGunController(player.inputController, player));
+		player.changeShootController(new ShotGunController(player.inputController, player));
 	}
 
 	public override void end()

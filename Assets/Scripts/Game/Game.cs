@@ -2,11 +2,16 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+using System.Linq;
+
 /// <summary>
 /// This is where the main game occurs.
 /// </summary>
 public class Game : MonoBehaviour
 {
+	public Transform singlePlayerSpawnPoint;
+	public Transform[] multiPlayerSpawnPointList;
+
 	public AsteroidManager asteroidManager;
 	public PowerUpManager powerUpManager;
 
@@ -54,8 +59,15 @@ public class Game : MonoBehaviour
 	public void init()
 	{
 		//Instantiate the game controller depending on what game mode we are playing
-		if (AsteroidsGameConfig.gameMode == GameModes.SinglePlayerMode) gameModeController = new SinglePlayerModeGameController(this, AsteroidsGameConfig.playerConfigList[0]);
-		else if (AsteroidsGameConfig.gameMode == GameModes.MultiPlayerMode) gameModeController = new MultiPlayerModeGameController(this, AsteroidsGameConfig.playerConfigList);
+		if (AsteroidsGameConfig.gameMode == GameModes.SinglePlayerMode)
+		{
+			gameModeController = new SinglePlayerModeGameController(this, singlePlayerSpawnPoint.position, AsteroidsGameConfig.playerConfigList[0]);
+		}
+		else if (AsteroidsGameConfig.gameMode == GameModes.MultiPlayerMode)
+		{
+			Vector3[] spawnPointList = multiPlayerSpawnPointList.Select(t => t.position).ToArray();
+			gameModeController = new MultiPlayerModeGameController(this, spawnPointList, AsteroidsGameConfig.playerConfigList);
+		}
 
 		//Register for game flow events
 		gameModeController.onGamePause += onGamePause;

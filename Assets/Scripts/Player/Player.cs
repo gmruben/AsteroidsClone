@@ -14,7 +14,7 @@ public class Player : MonoBehaviour
 	public PlayerAnimator playerAnimator;
 
 	private PlayerController playerController;
-	private IWeaponController weaponController;
+	private WeaponController weaponController;
 
 	private CustomParticleEmitter customParticleEmitter;
 
@@ -31,6 +31,8 @@ public class Player : MonoBehaviour
 
 	private PlayerConfig playerConfig;
 	private PowerUp currentPowerUp;
+
+	private Vector3 respawnPoint;
 
 	void Update()
 	{
@@ -72,7 +74,7 @@ public class Player : MonoBehaviour
 		endTimer();
 	}
 
-	public void changeShootController(IWeaponController controller)
+	public void changeShootController(WeaponController controller)
 	{
 		weaponController = controller;
 	}
@@ -88,7 +90,7 @@ public class Player : MonoBehaviour
 			}
 			else if (other.CompareTag(TagNames.Asteroid) && !isInvulnerable)
 			{
-				other.GetComponent<Asteroid>().hit(cachedTransform.position, playerController.direction);
+				other.GetComponent<Asteroid>().hit(cachedTransform.position, cachedTransform.up);
 
 				customParticleEmitter.explosion(color, cachedTransform.position);
 				hit ();
@@ -148,15 +150,16 @@ public class Player : MonoBehaviour
 	private IEnumerator respawnCoroutine()
 	{
 		yield return new WaitForSeconds(0.5f);
-		respawn();
+		respawn(respawnPoint);
 	}
 
 	/// <summary>
 	/// Respawns the player after dying
+	/// <param name="spawnPoint">The position to be respawn at.</param>
 	/// </summary>
-	private void respawn()
+	private void respawn(Vector3 spawnPoint)
 	{
-		cachedTransform.position = Vector3.zero;
+		cachedTransform.position = spawnPoint;
 		cachedTransform.rotation = Quaternion.identity;
 		
 		playerController.reset();
@@ -172,13 +175,15 @@ public class Player : MonoBehaviour
 	/// <summary>
 	/// Resets a player to its initial value
 	/// </summary>
+	/// <param name="spawnPoint">The position to be respawn at.</param>
 	/// <param name="numLives">The number of lives the player starts with.</param>
-	public void reset(int numLives)
+	public void reset(Vector3 spawnPoint, int numLives)
 	{
-		respawn();
+		respawn(spawnPoint);
 
 		score = 0;
 		this.numLives = numLives;
+		this.respawnPoint = spawnPoint;
 
 		gameController.updateScore(this);
 		gameController.updateLives(this);

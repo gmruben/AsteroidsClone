@@ -6,12 +6,15 @@ public class SinglePlayerModeGameController : GameModeController
 	private Game game;
 	private Player player;
 
+	private Vector3 spawnPoint;
+
 	private SinglePlayerGameHUD gameHUD;
 	private SinglePlayerGameOverMenu gameOverMenu;
 
-	public SinglePlayerModeGameController(Game game, PlayerConfig playerConfig)
+	public SinglePlayerModeGameController(Game game, Vector3 spawnPoint, PlayerConfig playerConfig)
 	{
 		this.game = game;
+		this.spawnPoint = spawnPoint;
 
 		gameHUD = MenuManager.instantiateSinglePlayerGameHUD();
 		gameHUD.pauseButton.onClick += onPauseButtonClick;
@@ -20,7 +23,7 @@ public class SinglePlayerModeGameController : GameModeController
 		player = EntityManager.instantiatePlayer();
 
 		player.init(this, playerConfig);
-		player.reset(playerNumLives);
+		player.reset(spawnPoint, playerNumLives);
 
 		player.onDead += onPlayerDead;
 	}
@@ -43,7 +46,7 @@ public class SinglePlayerModeGameController : GameModeController
 	public override void reset()
 	{
 		int playerNumLives = GameParamConfig.instance.retrieveParamValue<int>(GameConfigParamIds.PlayerNumLives);
-		player.reset(playerNumLives);
+		player.reset(spawnPoint, playerNumLives);
 	}
 
 	private void onPlayerDead()

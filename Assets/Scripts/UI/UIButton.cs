@@ -10,11 +10,6 @@ public class UIButton : MonoBehaviour
 	private Button _button;
 	private Text _text;
 
-	private Color normalTextColor = Color.white;
-	private Color highlightedTextColor = Color.yellow;
-	private Color pressedTextColor = Color.grey;
-	private Color disabledTextColor = Color.grey;
-
 	private bool isActive = true;
 	private bool hasText = true;
 
@@ -29,7 +24,7 @@ public class UIButton : MonoBehaviour
 
 		if (text != null && hasText)
 		{
-			text.color = isActive ? normalTextColor : disabledTextColor;
+			text.color = isActive ? button.colors.normalColor : button.colors.disabledColor;
 		}
 
 		button.interactable = isActive;
@@ -44,7 +39,7 @@ public class UIButton : MonoBehaviour
 	{
 		if (text != null && hasText && isActive)
 		{
-			text.color = highlightedTextColor;
+			text.color = button.colors.highlightedColor;
 		}
 	}
 
@@ -52,7 +47,7 @@ public class UIButton : MonoBehaviour
 	{
 		if (text != null && hasText && isActive)
 		{
-			text.color = normalTextColor;
+			text.color = button.colors.normalColor;
 		}
 	}
 
@@ -60,7 +55,7 @@ public class UIButton : MonoBehaviour
 	{
 		if (text != null && hasText && isActive)
 		{
-			text.color = pressedTextColor;
+			text.color = button.colors.pressedColor;
 		}
 	}
 	
@@ -68,7 +63,7 @@ public class UIButton : MonoBehaviour
 	{
 		if (text != null && hasText && isActive)
 		{
-			text.color = normalTextColor;
+			text.color = button.colors.normalColor;
 		}
 	}
 
@@ -91,7 +86,7 @@ public class UIButton : MonoBehaviour
 	{
 		get
 		{
-			if (_text == null && hasText) 
+			if (_text == null && hasText)
 			{
 				_text = GetComponentInChildren<Text>();
 				if (_text == null) hasText = false;

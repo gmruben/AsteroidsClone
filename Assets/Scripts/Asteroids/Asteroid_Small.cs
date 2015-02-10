@@ -14,10 +14,4 @@ public class Asteroid_Small : Asteroid
 		PoolManager.instance.destroyInstance(GetComponent<PoolInstance>());
 		customParticleEmitter.explosion(Color.white, cachedTransform.position);
 	}
-
-	/*public override void kill()
-	{
-		PoolManager.instance.destroyInstance(GetComponent<PoolInstance>());
-		customParticleEmitter.explosion(Color.white, cachedTransform.position);
-	}*/
 }

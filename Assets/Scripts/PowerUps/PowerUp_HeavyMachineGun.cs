@@ -8,18 +8,12 @@ public class PowerUp_HeavyMachineGun : PowerUp
 		base.Update ();
 	}
 
-	public override void pickUp(Player player)
-	{
-		this.player = player;
-
-		isActive = true;
+	public override void start()
+	{	
 		time = GameParamConfig.instance.retrieveParamValue<float>(GameConfigParamIds.HeavyMachineGunPowerUpTime);
 
 		player.setTimer(time);
 		player.changeShootController(new HeavyMachineGunController(player.inputController, player));
-
-		sprite.gameObject.SetActive(false);
-		dispatchOnPickUp();
 	}
 
 	public override void end()

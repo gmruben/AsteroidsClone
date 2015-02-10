@@ -8,12 +8,15 @@ public class MultiPlayerModeGameController : GameModeController
 	private Game game;
 	private List<Player> playerList = new List<Player>();
 
+	private Vector3[] spawnPointList;
+
 	private MultiPlayerGameHUD gameHUD;
 	private MultiPlayerGameOverMenu gameOverMenu;
 
-	public MultiPlayerModeGameController(Game game, List<PlayerConfig> playerConfigList)
+	public MultiPlayerModeGameController(Game game, Vector3[] spawnPointList, List<PlayerConfig> playerConfigList)
 	{
 		this.game = game;
+		this.spawnPointList = spawnPointList;
 
 		gameHUD = MenuManager.instantiateMultiPlayerGameHUD();
 		gameHUD.pauseButton.onClick += onPauseButtonClick;
@@ -26,7 +29,7 @@ public class MultiPlayerModeGameController : GameModeController
 			playerList.Add(player);
 
 			player.init(this, playerConfigList[i]);
-			player.reset(playerNumLives);
+			player.reset(spawnPointList[player.index], playerNumLives);
 			
 			player.onDead += onPlayerDead;
 		}
@@ -52,7 +55,7 @@ public class MultiPlayerModeGameController : GameModeController
 		int playerNumLives = GameParamConfig.instance.retrieveParamValue<int>(GameConfigParamIds.PlayerNumLives);
 		for (int i = 0; i < playerList.Count; i++)
 		{
-			playerList[i].reset(playerNumLives);
+			playerList[i].reset(spawnPointList[playerList[i].index], playerNumLives);
 		}
 	}
 
