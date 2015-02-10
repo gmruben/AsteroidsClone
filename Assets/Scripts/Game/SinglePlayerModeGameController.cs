@@ -59,10 +59,10 @@ public class SinglePlayerModeGameController : GameModeController
 		game.setGamePause(true);
 
 		//Check if we have a new highscore
-		if (player.score > GameSaveManager.gameSave.highscore)
+		if (player.score > GameSaveManager.instance.gameSave.highscore)
 		{
-			GameSaveManager.gameSave.highscore = player.score;
-			GameSaveManager.saveData();
+			GameSaveManager.instance.gameSave.highscore = player.score;
+			GameSaveManager.instance.saveData();
 		}
 
 		//We use a coroutine to delay the Game Over Menu a bit after the death

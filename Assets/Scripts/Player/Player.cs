@@ -9,15 +9,20 @@ public class Player : MonoBehaviour
 	[HideInInspector]
 	public Transform cachedTransform;
 
+	//A GameObject with all the player graphics (so we can stop rendering it if we need to)
 	public GameObject graphic;
+
+	//A timer for the power ups
 	public PlayerTimer playerTimer;
 	public PlayerAnimator playerAnimator;
 
+	//Controllers for the movement and the weapon
 	private PlayerController playerController;
 	private WeaponController weaponController;
 
 	private CustomParticleEmitter customParticleEmitter;
 
+	//A reference to the game mode controller
 	private GameModeController gameController;
 
 	public int score { get; private set; }
@@ -25,6 +30,7 @@ public class Player : MonoBehaviour
 
 	private bool isActive = true;
 
+	//Variables to manage invulnerability
 	private bool isInvulnerable = false;
 	private float invulnerableTime;
 	private float invulnerableCounter;
@@ -32,6 +38,7 @@ public class Player : MonoBehaviour
 	private PlayerConfig playerConfig;
 	private PowerUp currentPowerUp;
 
+	//The position where the player respawns when dies
 	private Vector3 respawnPoint;
 
 	void Update()
@@ -41,6 +48,7 @@ public class Player : MonoBehaviour
 			playerController.update(Time.deltaTime);
 			weaponController.update(Time.deltaTime);
 
+			//Check if the invulnerability has finished
 			if (isInvulnerable)
 			{
 				invulnerableCounter -= Time.deltaTime;
@@ -57,11 +65,16 @@ public class Player : MonoBehaviour
 	{
 		if (isActive)
 		{
+			//If it is a power up, pick it up
 			if (other.CompareTag(TagNames.PowerUp))
 			{
+				//If we had a power up active, end its effect
+				if (currentPowerUp != null) currentPowerUp.end();
+
 				currentPowerUp = other.GetComponent<PowerUp>();
 				currentPowerUp.pickUp(this);
 			}
+			//It can only be hit by an asteroid if it is not invulnerable
 			else if (other.CompareTag(TagNames.Asteroid) && !isInvulnerable)
 			{
 				other.GetComponent<Asteroid>().hit(cachedTransform.position, cachedTransform.up);

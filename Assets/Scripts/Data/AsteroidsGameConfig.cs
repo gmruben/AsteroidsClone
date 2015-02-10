@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 
 /// <summary>
-/// This class stores the configuration for the game (list of players and game mode)
+/// This class stores the configuration for the game (list of players and game mode). The configuration for this game
+/// is very simple, so it just has two static variables for the player list and the game mode
 /// </summary>
 public class AsteroidsGameConfig
 {

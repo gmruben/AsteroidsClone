@@ -4,11 +4,26 @@ using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 
-public class GameSaveManager : MonoBehaviour
+public class GameSaveManager
 {
-	private static GameSave _gameSave;
+	private static GameSaveManager _instance;
 
-	public static void loadData()
+	private GameSave _gameSave;
+
+	public static GameSaveManager instance
+	{
+		get
+		{
+			if (_instance == null)
+			{
+				_instance = new GameSaveManager();
+				_instance.loadData();
+			}
+			return _instance;
+		}
+	}
+
+	public void loadData()
 	{
 		if (!File.Exists(Application.persistentDataPath + "/gamesave.json"))
 		{
@@ -26,7 +41,7 @@ public class GameSaveManager : MonoBehaviour
 		}
 	}
 
-	public static void saveData()
+	public void saveData()
 	{
 		using(FileStream fs = new FileStream(Application.persistentDataPath + "/gamesave.json", FileMode.Create))
 		{
@@ -37,7 +52,7 @@ public class GameSaveManager : MonoBehaviour
 		}
 	}
 
-	private static void initGameSave()
+	private void initGameSave()
 	{
 		_gameSave = new GameSave();
 
@@ -45,13 +60,8 @@ public class GameSaveManager : MonoBehaviour
 		
 		saveData();
 	}
-
-	public static bool isInit
-	{
-		get { return _gameSave != null; }
-	}
-
-	public static GameSave gameSave
+	
+	public GameSave gameSave
 	{
 		get { return _gameSave; }
 		set { _gameSave = value; }

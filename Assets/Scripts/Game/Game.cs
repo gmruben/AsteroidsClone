@@ -31,8 +31,6 @@ public class Game : MonoBehaviour
 		//If there is no game config, create one (only for development: just in case we started the game from "Game" scene)
 		if (AsteroidsGameConfig.playerConfigList.Count == 0)
 		{
-			GameSaveManager.loadData();
-
 			//Create config for player
 			InputController inputController = new InputController(KeyCode.LeftArrow, KeyCode.RightArrow, KeyCode.UpArrow, KeyCode.DownArrow);
 			PlayerConfig playerConfig = new PlayerConfig(PlayerIndex.P1, Color.white, inputController);

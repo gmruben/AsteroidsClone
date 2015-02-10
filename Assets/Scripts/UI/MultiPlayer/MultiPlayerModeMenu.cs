@@ -69,6 +69,7 @@ public class MultiPlayerModeMenu : UIMenu
 	
 	private void startGame()
 	{
+		//Create the configuration for the multiplayer mode
 		AsteroidsGameConfig.playerConfigList.Clear();
 		for (int i = 0; i < playerBoxList.Length; i++)
 		{

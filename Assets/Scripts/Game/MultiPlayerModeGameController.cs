@@ -76,10 +76,10 @@ public class MultiPlayerModeGameController : GameModeController
 
 			//Check if we have a new highscore
 			int score = getHighestScore();
-			if (score > GameSaveManager.gameSave.highscore)
+			if (score > GameSaveManager.instance.gameSave.highscore)
 			{
-				GameSaveManager.gameSave.highscore = score;
-				GameSaveManager.saveData();
+				GameSaveManager.instance.gameSave.highscore = score;
+				GameSaveManager.instance.saveData();
 			}
 
 			//We use a coroutine to delay the Game Over Menu a bit after the death

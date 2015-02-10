@@ -13,7 +13,7 @@ public class MultiPlayerGameOverMenu : UIMenu
 
 	public void init(List<Player> playerList)
 	{
-		highscore.text = "HIGH SCORE: " + GameSaveManager.gameSave.highscore;
+		highscore.text = "HIGH SCORE: " + GameSaveManager.instance.gameSave.highscore;
 
 		for (int i = 0; i < playerList.Count; i++)
 		{

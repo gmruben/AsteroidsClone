@@ -20,6 +20,8 @@ public class SinglePlayerModeMenu : UIMenu
 
 	private void startGame()
 	{
+		//Create the configuration for the singleplayer mode
+
 		//Create config for player
 		InputController inputController = new InputController(KeyCode.LeftArrow, KeyCode.RightArrow, KeyCode.UpArrow, KeyCode.DownArrow);
 		PlayerConfig playerConfig = new PlayerConfig(PlayerIndex.P1, Color.white, inputController);
