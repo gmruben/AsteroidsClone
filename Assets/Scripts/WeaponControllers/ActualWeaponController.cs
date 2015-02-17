@@ -5,10 +5,10 @@ using System.Collections;
 /// Weapon controller is an abstract class that controls the cooldown of weapons. It executes the shoot
 /// function that is later implemented by each type of weapon.
 /// </summary>
-public abstract class WeaponController
+public abstract class ActualWeaponController
 {
 	protected InputController inputController;
-	protected IShooter shooter;
+	protected Player player;
 
 	protected bool isActionUp = false;
 	protected bool isActionDown = false;
@@ -17,30 +17,31 @@ public abstract class WeaponController
 	protected float coolDownTime;
 	protected float coolDownCounter = 0;
 
-	public WeaponController(InputController inputController, IShooter shooter)
+	public ActualWeaponController(InputController inputController, Player player)
 	{
 		this.inputController = inputController;
-		this.shooter = shooter;
+		this.player = player;
+	}
+
+	public void startShoot()
+	{
+		isActionUp = false;
+		isActionDown = true;
+		
+		if (coolDownCounter <= 0)
+		{
+			coolDownCounter = coolDownTime;
+			shoot(player.cachedTransform.up);
+		}
+	}
+
+	public void endShoot()
+	{
+		isActionUp = true;
 	}
 
 	public void update(float deltaTime)
 	{
-		if (inputController.isKeyDown(PlayerInputKeyIds.Action))
-		{
-			isActionUp = false;
-			isActionDown = true;
-
-			if (coolDownCounter <= 0)
-			{
-				coolDownCounter = coolDownTime;
-				shoot(shooter.shootDirection);
-			}
-		}
-		else if (!inputController.isKey(PlayerInputKeyIds.Action))
-		{
-			isActionUp = true;
-		}
-		
 		if (isActionDown)
 		{
 			coolDownCounter -= deltaTime;
@@ -53,7 +54,7 @@ public abstract class WeaponController
 				else if (isActionDown)
 				{
 					coolDownCounter = coolDownTime;
-					shoot(shooter.shootDirection);
+					shoot(player.cachedTransform.up);
 				}
 			}
 		}

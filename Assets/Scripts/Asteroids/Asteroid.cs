@@ -5,7 +5,7 @@ using System.Collections;
 /// Abstract class for all the different asteroids. The child classes have to implement the initParam
 /// and the hit functions.
 /// </summary>
-public abstract class Asteroid : MonoBehaviour
+public abstract class Asteroid : MonoBehaviour, IHittable
 {
 	public int score { get; protected set; }
 	public float speed { get; protected set; }
@@ -50,7 +50,7 @@ public abstract class Asteroid : MonoBehaviour
 
 	//Initialises the parameters for the asteroid
 	public abstract void initParams();
-	public abstract void hit(Vector3 position, Vector3 direction);
+	public abstract void hit(Bullet bullet, IShooter shooter, Vector3 position, Vector3 direction);
 
 	//Called when the game is paused
 	private void onGamePause(bool isPause)

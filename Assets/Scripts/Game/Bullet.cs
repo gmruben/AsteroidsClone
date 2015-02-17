@@ -7,7 +7,9 @@ public class Bullet : MonoBehaviour
 	private const float speed = 25.0f;
 
 	private Transform cachedTransform;
+	private SpriteRenderer spriteRenderer;
 
+	private IShooter shooter;
 	private Player player;
 	private Vector3 direction;
 
@@ -20,6 +22,8 @@ public class Bullet : MonoBehaviour
 	void Awake()
 	{
 		cachedTransform = transform;
+		spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+
 		customParticleEmitter = new CustomParticleEmitter();
 
 		//Create Warper
@@ -32,26 +36,31 @@ public class Bullet : MonoBehaviour
 
 	void OnTriggerEnter2D(Collider2D other)
 	{
-		if (other.CompareTag(TagNames.Asteroid))
+		IHittable hittable = other.GetComponent(typeof(IHittable)) as IHittable;
+		if (hittable != null) //if (other.CompareTag(TagNames.Asteroid))
 		{
-			Asteroid asteroid = other.GetComponent<Asteroid>();
-			asteroid.hit(cachedTransform.position, direction);
+			//Asteroid asteroid = other.GetComponent<Asteroid>();
+			//asteroid.hit(cachedTransform.position, direction);
+
+			hittable.hit(this, shooter, cachedTransform.position, direction);
+
+			//customParticleEmitter.hit(Color.white, cachedTransform.position, -direction);
 			
-			customParticleEmitter.hit(Color.white, cachedTransform.position, -direction);
+			//player.addScore(asteroid.score);
+			//PoolManager.instance.destroyInstance(GetComponent<PoolInstance>());
 			
-			player.addScore(asteroid.score);
-			PoolManager.instance.destroyInstance(GetComponent<PoolInstance>());
-			
-			GameCamera.instance.shake(0.25f, 0.25f);
+			//GameCamera.instance.shake(0.25f, 0.25f);
 		}
 	}
 
-	public void init(Player player, Vector3 direction)
+	public void init(Color color, IShooter shooter, Vector3 direction)
 	{
-		this.player = player;
+		//this.player = player;
+		this.shooter = shooter;
 		this.direction = direction;
 
 		lifeTimer = life;
+		spriteRenderer.color = color;
 	}
 
 	void Update()

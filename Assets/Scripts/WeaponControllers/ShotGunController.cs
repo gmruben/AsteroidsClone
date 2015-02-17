@@ -17,13 +17,15 @@ public class ShotGunController : WeaponController
 	{
 		for (int i = 0; i < numBullets; i++)
 		{
-			Bullet bullet = EntityManager.instantiateBullet();
+			//Bullet bullet = EntityManager.instantiateBullet();
 
 			float randomAngle = Random.Range(-10.0f, 10.0f);
 			Vector2 randomDirection = Quaternion.AngleAxis(randomAngle, Vector3.back) * direction;
 
-			bullet.init(player, randomDirection);
-			bullet.transform.position = player.cachedTransform.position;
+			//bullet.init(shooter as IShooter, shooter, randomDirection);
+			//bullet.transform.position = shooter.cachedTransform.position;
+
+			shooter.shoot(randomDirection);
 		}
 	}
 }

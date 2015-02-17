@@ -10,7 +10,7 @@ public class Asteroid_Small : Asteroid
 		speed = GameParamConfig.instance.retrieveParamValue<float>(GameConfigParamIds.AsteroidSmallSpeed);
 	}
 
-	public override void hit(Vector3 position, Vector3 direction)
+	public override void hit(Bullet bullet, IShooter shooter, Vector3 position, Vector3 direction)
 	{
 		//When a medium asteroid is hit, they dont create any more asteroids
 		PoolManager.instance.destroyInstance(GetComponent<PoolInstance>());

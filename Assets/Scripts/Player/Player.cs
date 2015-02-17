@@ -2,7 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IShooter, IHittable
 {
 	public event Action onDead;
 
@@ -77,7 +77,7 @@ public class Player : MonoBehaviour
 			//It can only be hit by an asteroid if it is not invulnerable
 			else if (other.CompareTag(TagNames.Asteroid) && !isInvulnerable)
 			{
-				other.GetComponent<Asteroid>().hit(cachedTransform.position, cachedTransform.up);
+				//other.GetComponent<Asteroid>().hit(this, cachedTransform.position, cachedTransform.up);
 				
 				GameCamera.instance.shake(0.5f,0.5f);
 				customParticleEmitter.explosion(color, cachedTransform.position);
@@ -118,7 +118,7 @@ public class Player : MonoBehaviour
 		gameController.updateScore(this);
 	}
 
-	private void hit()
+	public void hit()
 	{
 		//Set inactive until respawned
 		isActive = false;
@@ -188,6 +188,36 @@ public class Player : MonoBehaviour
 		gameController.updateLives(this);
 	}
 
+	public void hit(Bullet bullet, IShooter shooter, Vector3 position, Vector3 direction)
+	{
+		if (shooter is Player)
+		{
+			Player other = shooter as Player;
+			if (other.index != index)
+			{
+				Vector2 force = (Vector2) direction * 5.0f;
+				playerController.addForce(force);
+
+				customParticleEmitter.hit(other.color, position, -direction);
+				
+				PoolManager.instance.destroyInstance(bullet.GetComponent<PoolInstance>());
+				GameCamera.instance.shake(0.25f, 0.25f);
+			}
+		}
+		else if (shooter is EnemyShip)
+		{
+			EnemyShip other = shooter as EnemyShip;
+
+			hit();
+			addScore(other.score);
+
+			customParticleEmitter.hit(Color.white, position, -direction);
+			
+			PoolManager.instance.destroyInstance(bullet.GetComponent<PoolInstance>());
+			GameCamera.instance.shake(0.25f, 0.25f);
+		}
+	}
+
 	private void onGamePause(bool isPause)
 	{
 		isActive = !isPause;
@@ -211,5 +241,18 @@ public class Player : MonoBehaviour
 	public InputController inputController
 	{
 		get { return playerConfig.inputController; }
+	}
+
+	public void shoot(Vector3 direction)
+	{
+		Bullet bullet = EntityManager.instantiateBullet();
+		
+		bullet.init(color, this, direction);
+		bullet.transform.position = cachedTransform.position;
+	}
+
+	public Vector2 shootDirection
+	{
+		get { return cachedTransform.up; }
 	}
 }

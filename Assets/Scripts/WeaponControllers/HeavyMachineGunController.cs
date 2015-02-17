@@ -13,13 +13,15 @@ public class HeavyMachineGunController : WeaponController
 
 	public override void shoot(Vector3 direction)
 	{
-		Bullet bullet = EntityManager.instantiateHeavyBullet();
+		//Bullet bullet = EntityManager.instantiateHeavyBullet();
 
 		float randomAngle = Random.Range(-5.0f, 5.0f);
-		Vector2 bulletDirection = Quaternion.AngleAxis(randomAngle, Vector3.back) * direction;
+		Vector2 randomDirection = Quaternion.AngleAxis(randomAngle, Vector3.back) * direction;
 
-		bullet.init(player, bulletDirection);
-		bullet.transform.position = player.cachedTransform.position;
+		//bullet.init(shooter as IShooter, shooter, bulletDirection);
+		//bullet.transform.position = shooter.cachedTransform.position;
+
+		shooter.shoot(randomDirection);
 
 		GameCamera.instance.shake(0.25f, 0.75f);
 	}

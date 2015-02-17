@@ -10,7 +10,7 @@ public class Asteroid_Medium : Asteroid
 		speed = GameParamConfig.instance.retrieveParamValue<float>(GameConfigParamIds.AsteroidMediumSpeed);
 	}
 
-	public override void hit(Vector3 position, Vector3 direction)
+	public override void hit(Bullet bullet, IShooter shooter, Vector3 position, Vector3 direction)
 	{
 		//When a medium asteroid is hit, it creates two small asteroids
 		Vector3 direction1 = Quaternion.AngleAxis(90, Vector3.back) * direction;

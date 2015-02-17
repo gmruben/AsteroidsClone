@@ -52,7 +52,7 @@ public class Game : MonoBehaviour
 			//Update all the game objects
 			for (int i = 0; i < updatableItemList.Count; i++)
 			{
-				updatableItemList[i].update(Time.deltaTime);
+				//updatableItemList[i].update(Time.deltaTime);
 			}
 		}
 	}

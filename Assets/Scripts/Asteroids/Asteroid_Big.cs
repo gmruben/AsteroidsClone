@@ -10,7 +10,7 @@ public class Asteroid_Big : Asteroid
 		speed = GameParamConfig.instance.retrieveParamValue<float>(GameConfigParamIds.AsteroidBigSpeed);
 	}
 
-	public override void hit(Vector3 position, Vector3 direction)
+	public override void hit(Bullet bullet, IShooter shooter, Vector3 position, Vector3 direction)
 	{
 		//When a big asteroid is hit, it creates four medium asteroids
 		Vector3 direction1 = Quaternion.AngleAxis(45, Vector3.back) * direction;

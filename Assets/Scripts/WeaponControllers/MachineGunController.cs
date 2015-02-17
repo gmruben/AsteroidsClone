@@ -13,9 +13,11 @@ public class MachineGunController : WeaponController
 
 	public override void shoot(Vector3 direction)
 	{
-		Bullet bullet = EntityManager.instantiateBullet();
+		//Bullet bullet = EntityManager.instantiateBullet();
 		
-		bullet.init(player, direction);
-		bullet.transform.position = player.cachedTransform.position;
+		//bullet.init(shooter as IShooter, shooter, direction);
+		//bullet.transform.position = shooter.cachedTransform.position;
+
+		shooter.shoot(direction);
 	}
 }

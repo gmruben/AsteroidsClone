@@ -68,6 +68,11 @@ public class PlayerController
 		warper.checkWarp();
 	}
 
+	public void addForce(Vector2 force)
+	{
+		speed += force;
+	}
+
 	public void reset()
 	{
 		speed = Vector2.zero;
