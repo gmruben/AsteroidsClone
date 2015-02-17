@@ -15,6 +15,7 @@ public class Game : MonoBehaviour
 
 	public AsteroidManager asteroidManager;
 	public PowerUpManager powerUpManager;
+	public ShipManager shipManager;
 
 	private PauseMenu pauseMenu;
 
@@ -52,7 +53,7 @@ public class Game : MonoBehaviour
 			//Update all the game objects
 			for (int i = 0; i < updatableItemList.Count; i++)
 			{
-				//updatableItemList[i].update(Time.deltaTime);
+				updatableItemList[i].update(Time.deltaTime);
 			}
 		}
 	}
@@ -77,10 +78,12 @@ public class Game : MonoBehaviour
 	
 		asteroidManager.init();
 		powerUpManager.init();
+		shipManager.init();
 
 		//Add all the updatable items to the list
-		updatableItemList.Add(asteroidManager);
+		//updatableItemList.Add(asteroidManager);
 		updatableItemList.Add(powerUpManager);
+		updatableItemList.Add(shipManager);
 
 		//Create pool instances for all the items that are going to be instantiated intensively
 		PoolManager.instance.createPool (PoolManager.PoolIds.Bullet, Resources.Load("Prefabs/Bullet") as GameObject, 50);
@@ -90,6 +93,8 @@ public class Game : MonoBehaviour
 		PoolManager.instance.createPool (PoolManager.PoolIds.AsteroidBig, Resources.Load("Prefabs/Asteroid_Big") as GameObject, 50);
 		PoolManager.instance.createPool (PoolManager.PoolIds.AsteroidMedium, Resources.Load("Prefabs/Asteroid_Medium") as GameObject, 50);
 		PoolManager.instance.createPool (PoolManager.PoolIds.AsteroidSmall, Resources.Load("Prefabs/Asteroid_Small") as GameObject, 50);
+
+		PoolManager.instance.createPool (PoolManager.PoolIds.Ship, Resources.Load("Prefabs/Ship") as GameObject, 10);
 	}
 	
 	public void setGamePause(bool isPause)

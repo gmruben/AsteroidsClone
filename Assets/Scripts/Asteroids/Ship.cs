@@ -19,6 +19,11 @@ public class Ship : MonoBehaviour, IHittable, IShooter
 
 	private ActualWeaponController actualWeaponController;
 
+	void Awake()
+	{
+		cachedTransform = transform;
+	}
+
 	void Update()
 	{
 		if (isActive)
@@ -26,7 +31,7 @@ public class Ship : MonoBehaviour, IHittable, IShooter
 			cachedTransform.position += direction * speed * Time.deltaTime;
 			warper.checkWarp();
 
-			updateShoot();
+			//updateShoot();
 		}
 	}
 
@@ -57,6 +62,10 @@ public class Ship : MonoBehaviour, IHittable, IShooter
 
 		//Create the weapong controller
 		//actualWeaponController = new GunController();
+
+		//Get the config parameters for the ship
+		score = GameParamConfig.instance.retrieveParamValue<int>(GameConfigParamIds.ShipScore);
+		speed = GameParamConfig.instance.retrieveParamValue<float>(GameConfigParamIds.ShipSpeed);
 	}
 
 	public void hit(Bullet bullet, IShooter shooter, Vector3 position, Vector3 direction)

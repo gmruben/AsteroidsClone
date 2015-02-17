@@ -7,8 +7,7 @@ using System.Collections;
 /// </summary>
 public abstract class ActualWeaponController
 {
-	protected InputController inputController;
-	protected Player player;
+	protected IShooter shooter;
 
 	protected bool isActionUp = false;
 	protected bool isActionDown = false;
@@ -17,10 +16,9 @@ public abstract class ActualWeaponController
 	protected float coolDownTime;
 	protected float coolDownCounter = 0;
 
-	public ActualWeaponController(InputController inputController, Player player)
+	public ActualWeaponController(IShooter shooter)
 	{
-		this.inputController = inputController;
-		this.player = player;
+		this.shooter = shooter;
 	}
 
 	public void startShoot()
@@ -31,13 +29,20 @@ public abstract class ActualWeaponController
 		if (coolDownCounter <= 0)
 		{
 			coolDownCounter = coolDownTime;
-			shoot(player.cachedTransform.up);
+			//shoot(player.cachedTransform.up);
+			shoot(shooter.shootDirection);
 		}
 	}
 
 	public void endShoot()
 	{
 		isActionUp = true;
+	}
+
+	public void doShoot()
+	{
+		startShoot ();
+		endShoot ();
 	}
 
 	public void update(float deltaTime)
@@ -54,7 +59,8 @@ public abstract class ActualWeaponController
 				else if (isActionDown)
 				{
 					coolDownCounter = coolDownTime;
-					shoot(player.cachedTransform.up);
+					//shoot(player.cachedTransform.up);
+					shoot(shooter.shootDirection);
 				}
 			}
 		}

@@ -41,7 +41,7 @@ public class ShipManager : MonoBehaviour, IUpdateable
 			Vector3 position = spawnPointList[randomIndex].position;
 			Vector3 direction = spawnPointList[randomIndex].up;
 
-			instantiateAsteroid(PoolManager.PoolIds.AsteroidBig, position, direction);
+			instantiateShip(PoolManager.PoolIds.AsteroidBig, position, direction);
 		}
 	}
 
@@ -59,7 +59,7 @@ public class ShipManager : MonoBehaviour, IUpdateable
 		}
 	}
 
-	public void instantiateAsteroid(PoolManager.PoolIds id, Vector3 position, Vector3 direction)
+	public void instantiateShip(PoolManager.PoolIds id, Vector3 position, Vector3 direction)
 	{
 		Ship ship = EntityManager.instantiateShip();
 
