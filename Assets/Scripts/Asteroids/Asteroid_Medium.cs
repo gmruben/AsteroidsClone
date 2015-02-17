@@ -16,8 +16,8 @@ public class Asteroid_Medium : Asteroid
 		Vector3 direction1 = Quaternion.AngleAxis(90, Vector3.back) * direction;
 		Vector3 direction2 = Quaternion.AngleAxis(-90, Vector3.back) * direction;
 
-		asteroidManager.instantiateAsteroid(PoolIds.AsteroidSmall, position, direction1);
-		asteroidManager.instantiateAsteroid(PoolIds.AsteroidSmall, position, direction2);
+		asteroidManager.instantiateAsteroid(PoolManager.PoolIds.AsteroidSmall, position, direction1);
+		asteroidManager.instantiateAsteroid(PoolManager.PoolIds.AsteroidSmall, position, direction2);
 
 		PoolManager.instance.destroyInstance(GetComponent<PoolInstance>());
 	}

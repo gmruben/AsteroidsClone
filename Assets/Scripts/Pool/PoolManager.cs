@@ -10,7 +10,7 @@ public class PoolManager : MonoBehaviour
 {
 	private static PoolManager _instance;
 
-	private static Dictionary<string, PoolData> poolList = new Dictionary<string, PoolData> ();
+	private static Dictionary<PoolIds, PoolData> poolList = new Dictionary<PoolIds, PoolData> ();
 	
 	public static PoolManager instance
 	{
@@ -29,7 +29,7 @@ public class PoolManager : MonoBehaviour
 	/// </summary>
 	public void clearPoolList()
 	{
-		foreach(KeyValuePair<string, PoolData> pair in poolList)
+		foreach(KeyValuePair<PoolIds, PoolData> pair in poolList)
 		{
 			removePool(pair.Key);
 		}
@@ -42,7 +42,7 @@ public class PoolManager : MonoBehaviour
 	/// <param name="poolId">The Pool id.</param>
 	/// <param name="prefab">The prefab to instantiate all the instances.</param>
 	/// <param name="numInstances">Number of instances.</param>
-	public void createPool(string poolId, GameObject prefab, int numInstances)
+	public void createPool(PoolIds poolId, GameObject prefab, int numInstances)
 	{
 		PoolData poolData = new PoolData ();
 
@@ -61,7 +61,7 @@ public class PoolManager : MonoBehaviour
 	/// Removes all the instances in a pool
 	/// </summary>
 	/// <param name="poolId">Pool id.</param>
-	private void removePool(string poolId)
+	private void removePool(PoolIds poolId)
 	{
 		PoolData poolData = poolList[poolId];
 		for (int i = 0; i < poolData.numInstances; i++)
@@ -75,7 +75,7 @@ public class PoolManager : MonoBehaviour
 	/// </summary>
 	/// <returns>The pool instance.</returns>
 	/// <param name="poolId">Pool id.</param>
-	public PoolInstance retrievePoolInstance(string poolId)
+	public PoolInstance retrievePoolInstance(PoolIds poolId)
 	{
 		PoolData poolData = poolList[poolId];
 
@@ -109,7 +109,7 @@ public class PoolManager : MonoBehaviour
 	/// Resizes the instance list for a given pool (in case we need more instances that we expected)
 	/// </summary>
 	/// <param name="poolId">The id of the pool we want to resize.</param>
-	private void resizePoolInstanceList(string poolId)
+	private void resizePoolInstanceList(PoolIds poolId)
 	{
 		//Get the pool data and the prefab to instantiate
 		PoolData poolData = poolList[poolId];
@@ -157,9 +157,21 @@ public class PoolManager : MonoBehaviour
 
 		public PoolInstance[] instanceList;
 	}
+
+	public enum PoolIds
+	{
+		Bullet,
+		HeavyBullet,
+		Particle,
+		
+		AsteroidBig,
+		AsteroidMedium,
+		AsteroidSmall,
+		Ship
+	}
 }
 
-public class PoolIds
+/*public class PoolIds
 {
 	public static string Bullet = "Bullet";
 	public static string HeavyBullet = "HeavyBullet";
@@ -168,4 +180,6 @@ public class PoolIds
 	public static string AsteroidBig = "AsteroidBig";
 	public static string AsteroidMedium = "AsteroidMedium";
 	public static string AsteroidSmall = "AsteroidSmall";
-}
+
+	public static string Ship = "Ship";
+}*/

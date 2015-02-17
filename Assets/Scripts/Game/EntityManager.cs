@@ -15,23 +15,29 @@ public class EntityManager
 
 	public static Bullet instantiateBullet()
 	{
-		return PoolManager.instance.retrievePoolInstance (PoolIds.Bullet).GetComponent<Bullet>();
+		return PoolManager.instance.retrievePoolInstance (PoolManager.PoolIds.Bullet).GetComponent<Bullet>();
 	}
 
 	public static Bullet instantiateHeavyBullet()
 	{
-		return PoolManager.instance.retrievePoolInstance (PoolIds.HeavyBullet).GetComponent<Bullet>();
+		return PoolManager.instance.retrievePoolInstance (PoolManager.PoolIds.HeavyBullet).GetComponent<Bullet>();
 	}
 
 	public static CustomParticle instantiateParticle()
 	{
-		return PoolManager.instance.retrievePoolInstance (PoolIds.Particle).GetComponent<CustomParticle>();
+		return PoolManager.instance.retrievePoolInstance (PoolManager.PoolIds.Particle).GetComponent<CustomParticle>();
 	}
 
-	public static Asteroid instantiateAsteroid(string id)
+	public static Asteroid instantiateAsteroid(PoolManager.PoolIds id)
 	{
 		//We have a different pool for each type of asteroid
 		return PoolManager.instance.retrievePoolInstance (id).GetComponent<Asteroid>();
+	}
+
+	public static Ship instantiateShip()
+	{
+		//We have a different pool for each type of asteroid
+		return PoolManager.instance.retrievePoolInstance (PoolManager.PoolIds.Ship).GetComponent<Ship>();
 	}
 
 	public static PowerUp instantiatePowerUp(string id)

@@ -204,9 +204,9 @@ public class Player : MonoBehaviour, IShooter, IHittable
 				GameCamera.instance.shake(0.25f, 0.25f);
 			}
 		}
-		else if (shooter is EnemyShip)
+		else if (shooter is Ship)
 		{
-			EnemyShip other = shooter as EnemyShip;
+			Ship other = shooter as Ship;
 
 			hit();
 			addScore(other.score);

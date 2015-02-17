@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class EnemyShip : MonoBehaviour, IHittable, IShooter
+public class Ship : MonoBehaviour, IHittable, IShooter
 {
 	public int score { get; protected set; }
 	public float speed { get; protected set; }

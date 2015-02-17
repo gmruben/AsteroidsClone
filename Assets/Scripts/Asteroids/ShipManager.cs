@@ -4,16 +4,16 @@ using System.Collections;
 using System.Collections.Generic;
 
 /// <summary>
-/// This class takes care of instantiating the asteroids. It is updated from the game, so it implements the IUpdateable interface.
+/// This class takes care of instantiating the ships. It is updated from the game, so it implements the IUpdateable interface.
 /// </summary>
-public class AsteroidManager : MonoBehaviour, IUpdateable
+public class ShipManager : MonoBehaviour, IUpdateable
 {
 	//List with the different points an asteroid can be instantiated at
 	public Transform[] spawnPointList;
 
 	private float spawnCounter;
 	private float asteroidCounter;
-	private List<Asteroid> asteroidList;
+	private List<Ship> shipList;
 
 	private float spawnTime;
 
@@ -24,7 +24,7 @@ public class AsteroidManager : MonoBehaviour, IUpdateable
 		spawnCounter = 0;
 		asteroidCounter = 0;
 
-		asteroidList = new List<Asteroid>();
+		shipList = new List<Ship>();
 	}
 
 	public void update(float time)
@@ -53,17 +53,17 @@ public class AsteroidManager : MonoBehaviour, IUpdateable
 		spawnCounter = 0;
 		asteroidCounter = 0;
 
-		for (int i = 0; i < asteroidList.Count; i++)
+		for (int i = 0; i < shipList.Count; i++)
 		{
-			PoolManager.instance.destroyInstance(asteroidList[i].GetComponent<PoolInstance>());
+			PoolManager.instance.destroyInstance(shipList[i].GetComponent<PoolInstance>());
 		}
 	}
 
 	public void instantiateAsteroid(PoolManager.PoolIds id, Vector3 position, Vector3 direction)
 	{
-		Asteroid asteroid = EntityManager.instantiateAsteroid(id);
+		Ship ship = EntityManager.instantiateShip();
 
-		asteroid.init(this, position, direction);
-		asteroidList.Add(asteroid);
+		ship.init(position, direction);
+		shipList.Add(ship);
 	}
 }
