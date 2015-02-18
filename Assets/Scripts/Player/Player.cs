@@ -48,6 +48,8 @@ public class Player : MonoBehaviour, IShooter, IHittable
 			playerController.update(Time.deltaTime);
 			weaponController.update(Time.deltaTime);
 
+			updateShoot();
+
 			//Check if the invulnerability has finished
 			if (isInvulnerable)
 			{
@@ -74,15 +76,15 @@ public class Player : MonoBehaviour, IShooter, IHittable
 				currentPowerUp = other.GetComponent<PowerUp>();
 				currentPowerUp.pickUp(this);
 			}
-			//It can only be hit by an asteroid if it is not invulnerable
-			else if (other.CompareTag(TagNames.Asteroid) && !isInvulnerable)
+
+			//It can only be hit by an enemy if it is not invulnerable
+			IEnemy enemy = other.GetComponent(typeof(IEnemy)) as IEnemy;
+			if (enemy != null && !isInvulnerable)
 			{
-				//other.GetComponent<Asteroid>().hit(this, cachedTransform.position, cachedTransform.up);
-				
 				GameCamera.instance.shake(0.5f,0.5f);
 				customParticleEmitter.explosion(color, cachedTransform.position);
 				
-				hit ();
+				kill();
 			}
 		}
 	}
@@ -97,7 +99,7 @@ public class Player : MonoBehaviour, IShooter, IHittable
 		playerAnimator.init(playerConfig.color);
 
 		playerController = new PlayerController(playerConfig.inputController, playerAnimator, cachedTransform);
-		weaponController = new GunController(playerConfig.inputController, this);
+		weaponController = new GunController(this);
 
 		customParticleEmitter = new CustomParticleEmitter();
 
@@ -118,7 +120,7 @@ public class Player : MonoBehaviour, IShooter, IHittable
 		gameController.updateScore(this);
 	}
 
-	public void hit()
+	public void kill()
 	{
 		//Set inactive until respawned
 		isActive = false;
@@ -143,6 +145,18 @@ public class Player : MonoBehaviour, IShooter, IHittable
 		{
 			//If the player has run out of lives, send the event that it is dead 
 			if (onDead != null) onDead();
+		}
+	}
+
+	private void updateShoot()
+	{
+		if (inputController.isKeyDown(PlayerInputKeyIds.Action))
+		{
+			weaponController.startShoot();
+		}
+		else if (!inputController.isKey(PlayerInputKeyIds.Action))
+		{
+			weaponController.endShoot();
 		}
 	}
 
@@ -188,11 +202,11 @@ public class Player : MonoBehaviour, IShooter, IHittable
 		gameController.updateLives(this);
 	}
 
-	public void hit(Bullet bullet, IShooter shooter, Vector3 position, Vector3 direction)
+	public void hit(Bullet bullet, Vector3 position, Vector3 direction)
 	{
-		if (shooter is Player)
+		if (bullet.shooter is Player)
 		{
-			Player other = shooter as Player;
+			Player other = bullet.shooter as Player;
 			if (other.index != index)
 			{
 				Vector2 force = (Vector2) direction * 5.0f;
@@ -204,18 +218,20 @@ public class Player : MonoBehaviour, IShooter, IHittable
 				GameCamera.instance.shake(0.25f, 0.25f);
 			}
 		}
-		else if (shooter is Ship)
+		else if (bullet.shooter is IEnemy && !isInvulnerable)
 		{
-			Ship other = shooter as Ship;
-
-			hit();
-			addScore(other.score);
-
-			customParticleEmitter.hit(Color.white, position, -direction);
+			kill();
+			customParticleEmitter.hit(color, position, -direction);
 			
 			PoolManager.instance.destroyInstance(bullet.GetComponent<PoolInstance>());
 			GameCamera.instance.shake(0.25f, 0.25f);
 		}
+	}
+
+	public void shoot(Bullet bullet, Vector3 direction)
+	{
+		bullet.init(color, this, direction);
+		bullet.transform.position = cachedTransform.position;
 	}
 
 	private void onGamePause(bool isPause)
@@ -241,14 +257,6 @@ public class Player : MonoBehaviour, IShooter, IHittable
 	public InputController inputController
 	{
 		get { return playerConfig.inputController; }
-	}
-
-	public void shoot(Vector3 direction)
-	{
-		Bullet bullet = EntityManager.instantiateBullet();
-		
-		bullet.init(color, this, direction);
-		bullet.transform.position = cachedTransform.position;
 	}
 
 	public Vector2 shootDirection

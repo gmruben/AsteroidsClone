@@ -46,7 +46,7 @@ public class PowerUpManager : MonoBehaviour, IUpdateable
 		}
 	}
 
-	public void clear()
+	public void dispose()
 	{
 		spawnCounter = 0;
 		canSpawn = true;

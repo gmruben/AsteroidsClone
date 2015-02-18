@@ -10,7 +10,7 @@ using System.Collections.Generic;
 public class MultiPlayerModeGameController : GameModeController
 {
 	private Game game;
-	private List<Player> playerList = new List<Player>();
+	private List<Player> _playerList = new List<Player>();
 
 	private Vector3[] spawnPointList;
 
@@ -31,7 +31,7 @@ public class MultiPlayerModeGameController : GameModeController
 		for (int i = 0; i < playerConfigList.Count; i++)
 		{
 			Player player = EntityManager.instantiatePlayer();
-			playerList.Add(player);
+			_playerList.Add(player);
 
 			player.init(this, playerConfigList[i]);
 			player.reset(spawnPointList[player.index], playerNumLives);
@@ -59,9 +59,9 @@ public class MultiPlayerModeGameController : GameModeController
 	{
 		//Respawn all the players
 		int playerNumLives = GameParamConfig.instance.retrieveParamValue<int>(GameConfigParamIds.PlayerNumLives);
-		for (int i = 0; i < playerList.Count; i++)
+		for (int i = 0; i < _playerList.Count; i++)
 		{
-			playerList[i].reset(spawnPointList[playerList[i].index], playerNumLives);
+			_playerList[i].reset(spawnPointList[_playerList[i].index], playerNumLives);
 		}
 	}
 
@@ -90,14 +90,14 @@ public class MultiPlayerModeGameController : GameModeController
 	}
 
 	/// <summary>
-	/// Checks whether all the players in the game are dead or not
+	/// Checks whether all the players in the game_playerListor not
 	/// </summary>
 	/// <returns><c>true</c>, if all players are dead, <c>false</c> otherwise.</returns>
 	private bool allPlayersAreDead()
 	{
-		for (int i = 0; i < playerList.Count; i++)
+		for (int i = 0; i < _playerList.Count; i++)
 		{
-			if (!playerList[i].isDead) return false;
+			if (!_playerList[i].isDead) return false;
 		}
 		return true;
 	}
@@ -109,11 +109,11 @@ public class MultiPlayerModeGameController : GameModeController
 	private int getHighestScore()
 	{
 		int score = -1;
-		for (int i = 0; i < playerList.Count; i++)
+		for (int i = 0; i < _playerList.Count; i++)
 		{
-			if (playerList[i].score > score)
+			if (_playerList[i].score > score)
 			{
-				score = playerList[i].score;
+				score = _playerList[i].score;
 			}
 		}
 		return score;
@@ -129,7 +129,7 @@ public class MultiPlayerModeGameController : GameModeController
 		yield return new WaitForSeconds(0.5f);
 		
 		gameOverMenu = MenuManager.instantiateMultiPlayerGameOverMenu();
-		gameOverMenu.init(playerList);
+		gameOverMenu.init(_playerList);
 		
 		gameOverMenu.retryButton.onClick += onRetryButtonClick;
 		gameOverMenu.mainMenuButton.onClick += onMainMenuButtonClick;
@@ -154,5 +154,10 @@ public class MultiPlayerModeGameController : GameModeController
 		GameObject.Destroy(gameOverMenu.gameObject);
 
 		dispatchOnGameEnd();
+	}
+
+	public override List<Player> playerList
+	{ 
+		get { return _playerList; }
 	}
 }

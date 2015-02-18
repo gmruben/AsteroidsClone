@@ -11,19 +11,21 @@ public class ShipManager : MonoBehaviour, IUpdateable
 	//List with the different points an asteroid can be instantiated at
 	public Transform[] spawnPointList;
 
+	//List with the transform for all the possible targets
+	private List<Transform> targetList;
+
 	private float spawnCounter;
-	private float asteroidCounter;
 	private List<Ship> shipList;
 
 	private float spawnTime;
 
-	public void init()
+	public void init(List<Transform> targetList)
 	{
-		spawnTime = GameParamConfig.instance.retrieveParamValue<int>(GameConfigParamIds.AsteroidSpawnTime);
+		spawnTime = GameParamConfig.instance.retrieveParamValue<int>(GameConfigParamIds.ShipSpawnTime);
+
+		this.targetList = targetList;
 
 		spawnCounter = 0;
-		asteroidCounter = 0;
-
 		shipList = new List<Ship>();
 	}
 
@@ -34,7 +36,6 @@ public class ShipManager : MonoBehaviour, IUpdateable
 		if (spawnCounter > spawnTime)
 		{
 			spawnCounter = 0;
-			asteroidCounter++;
 
 			//Get a random spawn position
 			int randomIndex = UnityEngine.Random.Range(0, spawnPointList.Length);
@@ -46,13 +47,11 @@ public class ShipManager : MonoBehaviour, IUpdateable
 	}
 
 	/// <summary>
-	/// It destroys all the asteroids that are active at the moment
+	/// It destroys all the ships that are active at the moment
 	/// </summary>
-	public void clear()
+	public void dispose()
 	{
 		spawnCounter = 0;
-		asteroidCounter = 0;
-
 		for (int i = 0; i < shipList.Count; i++)
 		{
 			PoolManager.instance.destroyInstance(shipList[i].GetComponent<PoolInstance>());
@@ -63,7 +62,11 @@ public class ShipManager : MonoBehaviour, IUpdateable
 	{
 		Ship ship = EntityManager.instantiateShip();
 
-		ship.init(position, direction);
+		//Select a random target
+		int randomIndex = UnityEngine.Random.Range(0, targetList.Count);
+		Transform target = targetList[randomIndex];
+
+		ship.init(target, position, direction);
 		shipList.Add(ship);
 	}
 }

@@ -6,5 +6,8 @@ using System.Collections;
 /// </summary>
 public interface IUpdateable
 {
+	//Updates the game object
 	void update(float time);
+	//Disposes the game object when the game has finished
+	void dispose();
 }

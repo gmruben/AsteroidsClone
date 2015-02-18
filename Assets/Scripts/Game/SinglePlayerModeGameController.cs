@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 /// <summary>
 /// This class has the logic for the single player game mode. It updates the score and lives of the player and
@@ -100,5 +101,16 @@ public class SinglePlayerModeGameController : GameModeController
 	{
 		GameObject.Destroy(gameOverMenu.gameObject);
 		dispatchOnGameEnd();
+	}
+
+	public override List<Player> playerList
+	{ 
+		get
+		{
+			List<Player> _playerList = new List<Player>();
+			_playerList.Add(player);
+
+			return _playerList;
+		}
 	}
 }

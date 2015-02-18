@@ -8,7 +8,7 @@ public class ShotGunController : WeaponController
 {
 	private const int numBullets = 5;
 
-	public ShotGunController(InputController inputController, Player player) : base(inputController, player)
+	public ShotGunController(IShooter shooter) : base(shooter)
 	{
 		coolDownTime = GameParamConfig.instance.retrieveParamValue<float>(GameConfigParamIds.ShotGunCoolDownTime);
 	}
@@ -17,15 +17,11 @@ public class ShotGunController : WeaponController
 	{
 		for (int i = 0; i < numBullets; i++)
 		{
-			//Bullet bullet = EntityManager.instantiateBullet();
-
 			float randomAngle = Random.Range(-10.0f, 10.0f);
 			Vector2 randomDirection = Quaternion.AngleAxis(randomAngle, Vector3.back) * direction;
 
-			//bullet.init(shooter as IShooter, shooter, randomDirection);
-			//bullet.transform.position = shooter.cachedTransform.position;
-
-			shooter.shoot(randomDirection);
+			Bullet bullet = EntityManager.instantiateBullet();
+			shooter.shoot(bullet, randomDirection);
 		}
 	}
 }

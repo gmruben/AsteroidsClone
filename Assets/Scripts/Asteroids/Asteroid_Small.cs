@@ -10,10 +10,20 @@ public class Asteroid_Small : Asteroid
 		speed = GameParamConfig.instance.retrieveParamValue<float>(GameConfigParamIds.AsteroidSmallSpeed);
 	}
 
-	public override void hit(Bullet bullet, IShooter shooter, Vector3 position, Vector3 direction)
+	public override void hit(Bullet bullet, Vector3 position, Vector3 direction)
 	{
-		//When a medium asteroid is hit, they dont create any more asteroids
-		PoolManager.instance.destroyInstance(GetComponent<PoolInstance>());
-		customParticleEmitter.explosion(Color.white, cachedTransform.position);
+		if (bullet.shooter is Player)
+		{
+			Player other = bullet.shooter as Player;
+			other.addScore(score);
+
+			customParticleEmitter.explosion(other.color, cachedTransform.position);
+
+			//When a medium asteroid is hit, they dont create any more asteroids
+			PoolManager.instance.destroyInstance(GetComponent<PoolInstance>());
+			PoolManager.instance.destroyInstance(bullet.GetComponent<PoolInstance>());
+
+			GameCamera.instance.shake(0.15f, 0.15f);
+		}
 	}
 }

@@ -5,5 +5,5 @@ public interface IShooter
 {
 	Vector2 shootDirection { get; }
 
-	void shoot(Vector3 direction);
+	void shoot(Bullet bullet, Vector3 direction);
 }

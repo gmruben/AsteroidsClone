@@ -9,7 +9,8 @@ public class Bullet : MonoBehaviour
 	private Transform cachedTransform;
 	private SpriteRenderer spriteRenderer;
 
-	private IShooter shooter;
+	public IShooter shooter { get; private set; }
+
 	private Player player;
 	private Vector3 direction;
 
@@ -17,14 +18,11 @@ public class Bullet : MonoBehaviour
 	private bool isActive = true;
 
 	private Warper warper;
-	private CustomParticleEmitter customParticleEmitter;
 
 	void Awake()
 	{
 		cachedTransform = transform;
 		spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-
-		customParticleEmitter = new CustomParticleEmitter();
 
 		//Create Warper
 		warper = new Warper (cachedTransform);
@@ -37,25 +35,14 @@ public class Bullet : MonoBehaviour
 	void OnTriggerEnter2D(Collider2D other)
 	{
 		IHittable hittable = other.GetComponent(typeof(IHittable)) as IHittable;
-		if (hittable != null) //if (other.CompareTag(TagNames.Asteroid))
+		if (hittable != null)
 		{
-			//Asteroid asteroid = other.GetComponent<Asteroid>();
-			//asteroid.hit(cachedTransform.position, direction);
-
-			hittable.hit(this, shooter, cachedTransform.position, direction);
-
-			//customParticleEmitter.hit(Color.white, cachedTransform.position, -direction);
-			
-			//player.addScore(asteroid.score);
-			//PoolManager.instance.destroyInstance(GetComponent<PoolInstance>());
-			
-			//GameCamera.instance.shake(0.25f, 0.25f);
+			hittable.hit(this, cachedTransform.position, direction);
 		}
 	}
 
 	public void init(Color color, IShooter shooter, Vector3 direction)
 	{
-		//this.player = player;
 		this.shooter = shooter;
 		this.direction = direction;
 

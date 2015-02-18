@@ -41,6 +41,11 @@ public class GameConfigMenu : UIMenu
 		paramIdList.Add (new GameConfigData (GameConfigParamIds.AsteroidBigScore, "BIG ASTEROID SCORE", ""));
 		paramIdList.Add (new GameConfigData (GameConfigParamIds.AsteroidBigSpeed, "BIG ASTEROID SPEED", ""));
 
+		//SHIPS
+		paramIdList.Add (new GameConfigData (GameConfigParamIds.ShipSpawnTime, "SHIP SPAWN TIME", ""));
+		paramIdList.Add (new GameConfigData (GameConfigParamIds.ShipScore, "SHIP SCORE", ""));
+		paramIdList.Add (new GameConfigData (GameConfigParamIds.ShipSpeed, "SHIP SPEED", ""));
+
 		itemList.init (paramIdList);
 	}
 

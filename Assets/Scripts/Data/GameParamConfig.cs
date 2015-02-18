@@ -59,7 +59,9 @@ public class GameParamConfig
 		parameterList.Add (GameConfigParamIds.AsteroidBigSpeed, "5.0");
 
 		//SHIP
-		parameterList.Add (GameConfigParamIds.ShipSpawnTime, "1");
+		parameterList.Add (GameConfigParamIds.ShipSpawnTime, "15");
+		parameterList.Add (GameConfigParamIds.ShipScore, "100");
+		parameterList.Add (GameConfigParamIds.ShipSpeed, "10.0");
 	}
 
 	public void storeValue(string id, string value)

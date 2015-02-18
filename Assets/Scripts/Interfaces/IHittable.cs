@@ -3,5 +3,5 @@ using System.Collections;
 
 public interface IHittable
 {
-	void hit(Bullet bullet, IShooter shooter, Vector3 position, Vector3 direction);
+	void hit(Bullet bullet, Vector3 position, Vector3 direction);
 }

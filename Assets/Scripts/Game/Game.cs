@@ -78,10 +78,10 @@ public class Game : MonoBehaviour
 	
 		asteroidManager.init();
 		powerUpManager.init();
-		shipManager.init();
+		shipManager.init(gameModeController.playerList.Select(p => p.transform).ToList());
 
 		//Add all the updatable items to the list
-		//updatableItemList.Add(asteroidManager);
+		updatableItemList.Add(asteroidManager);
 		updatableItemList.Add(powerUpManager);
 		updatableItemList.Add(shipManager);
 
@@ -107,8 +107,11 @@ public class Game : MonoBehaviour
 
 	private void restartGame()
 	{
-		asteroidManager.clear();
-		powerUpManager.clear();
+		//Dispose all the game objects
+		for (int i = 0; i < updatableItemList.Count; i++)
+		{
+			updatableItemList[i].dispose();
+		}
 
 		setGamePause(false);
 	}

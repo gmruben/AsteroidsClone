@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 /// <summary>
 /// An abstract class for the different classes for each game mode
@@ -32,4 +33,6 @@ public abstract class GameModeController
 	{
 		if (onGameEnd != null) onGameEnd();
 	}
+
+	public abstract List<Player> playerList { get; }
 }

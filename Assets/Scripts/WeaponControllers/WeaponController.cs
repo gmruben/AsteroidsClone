@@ -7,7 +7,6 @@ using System.Collections;
 /// </summary>
 public abstract class WeaponController
 {
-	protected InputController inputController;
 	protected IShooter shooter;
 
 	protected bool isActionUp = false;
@@ -17,30 +16,36 @@ public abstract class WeaponController
 	protected float coolDownTime;
 	protected float coolDownCounter = 0;
 
-	public WeaponController(InputController inputController, IShooter shooter)
+	public WeaponController(IShooter shooter)
 	{
-		this.inputController = inputController;
 		this.shooter = shooter;
+	}
+
+	public void startShoot()
+	{
+		isActionUp = false;
+		isActionDown = true;
+		
+		if (coolDownCounter <= 0)
+		{
+			coolDownCounter = coolDownTime;
+			shoot(shooter.shootDirection);
+		}
+	}
+
+	public void endShoot()
+	{
+		isActionUp = true;
+	}
+
+	public void oneShot()
+	{
+		startShoot ();
+		endShoot ();
 	}
 
 	public void update(float deltaTime)
 	{
-		if (inputController.isKeyDown(PlayerInputKeyIds.Action))
-		{
-			isActionUp = false;
-			isActionDown = true;
-
-			if (coolDownCounter <= 0)
-			{
-				coolDownCounter = coolDownTime;
-				shoot(shooter.shootDirection);
-			}
-		}
-		else if (!inputController.isKey(PlayerInputKeyIds.Action))
-		{
-			isActionUp = true;
-		}
-		
 		if (isActionDown)
 		{
 			coolDownCounter -= deltaTime;

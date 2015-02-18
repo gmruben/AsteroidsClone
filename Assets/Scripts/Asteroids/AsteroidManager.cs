@@ -48,7 +48,7 @@ public class AsteroidManager : MonoBehaviour, IUpdateable
 	/// <summary>
 	/// It destroys all the asteroids that are active at the moment
 	/// </summary>
-	public void clear()
+	public void dispose()
 	{
 		spawnCounter = 0;
 		asteroidCounter = 0;
